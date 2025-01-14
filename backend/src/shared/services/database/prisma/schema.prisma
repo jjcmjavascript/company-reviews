@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int @id @default(autoincrement())
+  email String @unique @db.VarChar()
+  name  String @db.VarChar()
+  lastname  String? @db.VarChar()
+  tax String? @db.VarChar()
+  active Boolean @default(true)
+  password Password?
+  roles UserRole[]
+}
+
+model Password {
+  id Int @id @default(autoincrement())
+  password String @db.VarChar()
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserRole {
+  id Int @id @default(autoincrement())
+  name String  @db.VarChar()
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
