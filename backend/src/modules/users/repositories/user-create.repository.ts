@@ -58,7 +58,7 @@ class UserCreateRepository {
           name: tempUser.name,
           email: tempUser.email,
           tax: tempUser.tax,
-          active: tempUser.active,
+          deletedAt: tempUser.deletedAt,
         });
       });
 

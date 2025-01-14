@@ -4,7 +4,7 @@ export interface UserPrimitive {
   lastname?: string;
   tax?: string;
   email: string;
-  active: boolean;
+  deletedAt?: Date;
 }
 
 export class User {
@@ -20,7 +20,7 @@ export class User {
       name: user.email,
       email: user.email,
       tax: user.tax,
-      active: user.active,
+      deletedAt: user.deletedAt,
     });
   }
 
@@ -30,7 +30,7 @@ export class User {
       name: this.attributes.name,
       email: this.attributes.email,
       tax: this.attributes.tax,
-      active: this.attributes.active,
+      deletedAt: this.attributes.deletedAt,
     };
   }
 
@@ -44,7 +44,7 @@ export class User {
       name: this.attributes.name,
       email: this.attributes.email,
       tax: this.attributes.tax,
-      active: this.attributes.active,
+      deletedAt: this.attributes.deletedAt,
     };
   }
 }
