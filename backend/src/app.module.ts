@@ -6,9 +6,9 @@ import { SentryGlobalFilter } from '@sentry/nestjs/setup';
 import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
-import { PushNotificationTokenModule } from '@modules/push-notification-tokens/push-notification-token.module';
 import { config } from '@config/config';
 // import { ScheduleModule } from '@nestjs/schedule';
+import { SubtypeModule } from './modules/subtype/subtype.module';
 
 const providers = [];
 
@@ -30,7 +30,7 @@ providers.push({
     // ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
-    PushNotificationTokenModule,
+    SubtypeModule,
   ],
   controllers: [],
   providers,

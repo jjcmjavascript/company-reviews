@@ -3,6 +3,7 @@ export interface SubTypePrimitive {
   name: string;
   description?: string;
   typeId: number;
+  deletedAt: Date;
 }
 
 export class SubType {
@@ -18,6 +19,7 @@ export class SubType {
       name: subtype.name,
       description: subtype.description,
       typeId: subtype.typeId,
+      deletedAt: subtype.deletedAt,
     });
   }
 

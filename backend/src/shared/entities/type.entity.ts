@@ -1,6 +1,7 @@
 export interface TypePrimitive {
   id: number;
   name: string;
+  deletedAt: Date,
   description?: string;
 }
 
@@ -15,6 +16,7 @@ export class Type {
     return new Type({
       id: type.id,
       name: type.name,
+      deletedAt: type.deletedAt,
       description: type.description,
     });
   }

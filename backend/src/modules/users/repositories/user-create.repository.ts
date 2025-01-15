@@ -76,7 +76,6 @@ class UserCreateRepository {
       where: { email },
     });
 
-    console.log('-------> user:', user, email);
     if (user) {
       throw new ConflictException({ errors: ['Email already exists'] });
     }
