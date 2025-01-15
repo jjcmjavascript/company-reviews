@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { resetDb } from '../helpers/resetdb';
-import { UserModule } from '@/modules/users/user.module';
+import { UserModule } from '@modules/users/user.module';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;

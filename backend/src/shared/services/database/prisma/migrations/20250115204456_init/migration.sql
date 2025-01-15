@@ -53,14 +53,14 @@ CREATE TABLE "ReportedCompanyComment" (
 );
 
 -- CreateTable
-CREATE TABLE "UserReview" (
+CREATE TABLE "Review" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "reportedCompanyId" INTEGER NOT NULL,
     "review" TEXT,
     "deletedAt" TIMESTAMP,
 
-    CONSTRAINT "UserReview_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -69,7 +69,7 @@ CREATE TABLE "ReviewDetail" (
     "typeId" INTEGER NOT NULL,
     "description" TEXT,
     "score" INTEGER NOT NULL,
-    "userReviewId" INTEGER NOT NULL,
+    "reviewId" INTEGER NOT NULL,
     "deletedAt" TIMESTAMP,
 
     CONSTRAINT "ReviewDetail_pkey" PRIMARY KEY ("id")
@@ -118,13 +118,13 @@ ALTER TABLE "ReportedCompanyComment" ADD CONSTRAINT "ReportedCompanyComment_repo
 ALTER TABLE "ReportedCompanyComment" ADD CONSTRAINT "ReportedCompanyComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserReview" ADD CONSTRAINT "UserReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserReview" ADD CONSTRAINT "UserReview_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Review" ADD CONSTRAINT "Review_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_userReviewId_fkey" FOREIGN KEY ("userReviewId") REFERENCES "UserReview"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "SubType"("id") ON DELETE CASCADE ON UPDATE CASCADE;

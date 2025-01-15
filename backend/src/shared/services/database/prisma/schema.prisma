@@ -19,7 +19,7 @@ model User {
   password  Password?
   roles     UserRole[]
   comments  ReportedCompanyComment[]
-  reviews   UserReview[]
+  reviews   Review[]
 }
 
 model Password {
@@ -42,7 +42,7 @@ model ReportedCompany {
   description String?                  @db.Text()
   image       String?                  @db.VarChar()
   comments    ReportedCompanyComment[]
-  reviews     UserReview[]
+  reviews     Review[]
   deletedAt   DateTime?   @db.Timestamp()
 }
 
@@ -57,7 +57,7 @@ model ReportedCompanyComment {
   user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model UserReview {
+model Review {
   id                Int               @id @default(autoincrement())
   userId            Int
   reportedCompanyId Int
@@ -73,9 +73,9 @@ model ReviewDetail {
   typeId            Int
   description       String?           @db.Text()
   score             Int
-  userReviewId      Int
+  reviewId      Int
   deletedAt         DateTime?        @db.Timestamp()
-  userReview        UserReview       @relation(fields: [userReviewId], references: [id], onDelete: Cascade)
+  review            Review       @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   type              SubType          @relation(fields: [typeId], references: [id], onDelete: Cascade)
 }
 

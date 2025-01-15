@@ -8,7 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { config } from '@config/config';
 // import { ScheduleModule } from '@nestjs/schedule';
-import { SubtypeModule } from './modules/subtype/subtype.module';
+import { SubTypeModule } from './modules/subtype/subtype.module';
 
 const providers = [];
 
@@ -30,7 +30,7 @@ providers.push({
     // ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
-    SubtypeModule,
+    SubTypeModule,
   ],
   controllers: [],
   providers,

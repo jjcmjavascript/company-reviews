@@ -1,8 +1,8 @@
 export interface ReportedCompanyPrimitive {
   id: number;
   name: string;
-  description: string;
-  image: string;
+  description?: string;
+  image?: string;
 }
 
 export class ReportedCompany {
