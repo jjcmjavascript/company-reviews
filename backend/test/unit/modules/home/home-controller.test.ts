@@ -5,25 +5,39 @@ import { HomeController } from '@modules/home/home.controller';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { HomeIndexService } from '@modules/home/service/home-index.service';
 import { ReportedCompany } from '@shared/entities/reported-company.entity';
+import { UserReviewDetailsFindTopRepository } from '@modules/user-review-details/repositories/user-review-details-find-top.repository';
+import { ReviewFindAllRepository } from '@modules/review/repositories/review-find-all.repository';
+import { Review } from '@shared/entities/review.entity';
 
 describe('HomeController', () => {
   let homeController: HomeController;
   let reportedCompanyFindAllRepository: ReportedCompanyFindAllRepository;
+  let userReviewDetailsFindTopRepository: UserReviewDetailsFindTopRepository;
+  let reviewFindAllRepository: ReviewFindAllRepository;
 
   beforeAll(async () => {
     const ref = await Test.createTestingModule({
       providers: [
-        ReportedCompanyFindAllRepository,
-        HomeIndexService,
         {
           provide: PrismaService,
           useValue: {},
         },
+        UserReviewDetailsFindTopRepository,
+        ReviewFindAllRepository,
+        ReportedCompanyFindAllRepository,
+        HomeIndexService,
       ],
       controllers: [HomeController],
     }).compile();
 
     homeController = ref.get(HomeController);
+
+    userReviewDetailsFindTopRepository = ref.get(
+      UserReviewDetailsFindTopRepository,
+    );
+
+    reviewFindAllRepository = ref.get(ReviewFindAllRepository);
+
     reportedCompanyFindAllRepository = ref.get(
       ReportedCompanyFindAllRepository,
     );
@@ -31,6 +45,15 @@ describe('HomeController', () => {
 
   it('should return a list of companies', async () => {
     const result = [];
+
+    jest
+      .spyOn(userReviewDetailsFindTopRepository, 'execute')
+      .mockImplementationOnce(async () => result);
+
+    jest
+      .spyOn(reviewFindAllRepository, 'execute')
+      .mockImplementationOnce(async () => result);
+
     jest
       .spyOn(reportedCompanyFindAllRepository, 'execute')
       .mockImplementationOnce(async () => result);
@@ -42,15 +65,25 @@ describe('HomeController', () => {
   });
 
   it('should return at leat 1 result', async () => {
-    const companies = [new ReportedCompany({ id: 1, name: 'Test Company' })];
+    jest
+      .spyOn(userReviewDetailsFindTopRepository, 'execute')
+      .mockImplementationOnce(async () => [{ score: 2, reviewId: 2 }]);
+
+    jest
+      .spyOn(reviewFindAllRepository, 'execute')
+      .mockImplementationOnce(async () => [
+        new Review({ id: 2, userId: 2, reportedCompanyId: 2 }),
+      ]);
 
     jest
       .spyOn(reportedCompanyFindAllRepository, 'execute')
-      .mockImplementationOnce(async () => companies);
+      .mockImplementationOnce(async () => [
+        new ReportedCompany({ id: 2, name: 'zurdos inutiles' }),
+      ]);
 
     const response = await homeController.index();
 
     expect(response.length).toBeGreaterThan(0);
-    expect(response.some((i) => i.name.includes('Test'))).toBeTruthy();
+    expect(response.some((i) => i.name.includes('zurdos'))).toBeTruthy();
   });
 });

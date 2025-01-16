@@ -17,7 +17,7 @@ export class UserReviewDetailsFindTopRepository {
           score: 'desc',
         },
       },
-      take: 5,
+      take: 6,
     });
 
     return result.map((r) => ({
