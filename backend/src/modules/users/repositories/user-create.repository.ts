@@ -8,8 +8,8 @@ import { User, UserPrimitive } from '@entities/user.entity';
 import { Roles } from '@shared/services/permission/types/roles.enum';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { PasswordCreateRepository } from '@modules/password/password-create.repository';
-import { UserRolesCreateRepository } from '@modules/user-roles/user-roles-create.repository';
 import { PasswordPrimitive } from '@shared/entities/password.entity';
+import { UserRolesCreateRepository } from '@modules/user-roles/repositories/user-roles-create.repository';
 
 @Injectable()
 class UserCreateRepository {

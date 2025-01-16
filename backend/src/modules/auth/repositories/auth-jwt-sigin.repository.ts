@@ -4,10 +4,10 @@ import { PermissionService } from '@services/permision.service';
 import { compare } from '@helpers/hash.helper';
 import { Response } from 'express';
 import { UserFindOneRepository } from '@modules/users/repositories/user-find-one.repository';
-import { UserRolesFindOneRepository } from '@modules/user-roles/user-roles-find-one.repository';
 import { PasswordFindOneRepository } from '@modules/password/password-find-one.repository';
 import { Roles } from '@shared/services/permission/types/roles.enum';
 import { config } from '@config/config';
+import { UserRolesFindOneRepository } from '@modules/user-roles/repositories/user-roles-find-one.repository';
 
 @Injectable()
 export class AuthJwtSingInRepostory {

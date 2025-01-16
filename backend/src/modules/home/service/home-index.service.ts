@@ -1,15 +1,15 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { UserReviewDetailsFindTopReturn } from '@modules/user-review-details/user-reviews-details.interfaces';
-import { UserReviewDetailsFindTopRepository } from '@modules/user-review-details/repositories/user-review-details-find-top.repository';
+import { ReviewDetailsFindTopRepository } from '@modules/review-details/repositories/review-details-find-top.repository';
 import { ReportedCompanyFindAllRepository } from '@modules/reported-company/repositories/reported-company-find-all.repository';
 import { ReportedCompany } from '@shared/entities/reported-company.entity';
 import { ReviewFindAllRepository } from '@modules/review/repositories/review-find-all.repository';
 import { Review } from '@shared/entities/review.entity';
+import { ReviewDetailsFindTopReturn } from '@modules/review-details/reviews-details.interfaces';
 
 @Injectable()
 export class HomeIndexService {
   constructor(
-    private readonly reviewDetailtsFindTop: UserReviewDetailsFindTopRepository,
+    private readonly reviewDetailtsFindTop: ReviewDetailsFindTopRepository,
     private readonly reviewsRepository: ReviewFindAllRepository,
     private readonly companyRepository: ReportedCompanyFindAllRepository,
   ) {}
@@ -41,7 +41,7 @@ export class HomeIndexService {
   private format(params: {
     companies: ReportedCompany[];
     reviews: Review[];
-    scores: UserReviewDetailsFindTopReturn[];
+    scores: ReviewDetailsFindTopReturn[];
   }) {
     return params.reviews.map((r) => {
       const company = params.companies.find(

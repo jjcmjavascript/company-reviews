@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '@shared/services/permission/types/roles.enum';
-import { UserRolesFindOneRepository } from './user-roles-find-one.repository';
 import { IS_PUBLIC_KEY } from '@shared/decorators/public.decorator';
+import { UserRolesFindOneRepository } from './repositories/user-roles-find-one.repository';
 
 @Injectable()
 export class UserRolesGuard implements CanActivate {

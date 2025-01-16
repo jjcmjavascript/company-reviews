@@ -1,75 +1,75 @@
-import { config } from '@config/config';
-import { Injectable } from '@nestjs/common';
-import { Expo, ExpoPushTicket } from 'expo-server-sdk';
+// import { config } from '@config/config';
+// import { Injectable } from '@nestjs/common';
+// import { Expo, ExpoPushTicket } from 'expo-server-sdk';
 
-export const expo = new Expo({
-  useFcmV1: true,
-  accessToken: config.pushNotification.token,
-});
+// export const expo = new Expo({
+//   useFcmV1: true,
+//   accessToken: config.pushNotification.token,
+// });
 
-export interface ExpoPushMessage {
-  to: string;
-  sound: string;
-  body: string;
-  data: any;
-  title: string;
-}
+// export interface ExpoPushMessage {
+//   to: string;
+//   sound: string;
+//   body: string;
+//   data: any;
+//   title: string;
+// }
 
-const defaultExpoPushMessage: ExpoPushMessage = {
-  to: '',
-  sound: 'default',
-  body: '',
-  data: {},
-  title: '',
-};
+// const defaultExpoPushMessage: ExpoPushMessage = {
+//   to: '',
+//   sound: 'default',
+//   body: '',
+//   data: {},
+//   title: '',
+// };
 
-@Injectable()
-export class ExpoSendPushNotification {
-  private tickets: ExpoPushTicket[];
+// @Injectable()
+// export class ExpoSendPushNotification {
+//   private tickets: ExpoPushTicket[];
 
-  constructor() {
-    this.tickets = [];
-  }
+//   constructor() {
+//     this.tickets = [];
+//   }
 
-  async preparePushNotification(
-    tokens: string[],
-    message: Partial<ExpoPushMessage>,
-  ): Promise<ExpoPushMessage[]> {
-    const messages = [];
+//   async preparePushNotification(
+//     tokens: string[],
+//     message: Partial<ExpoPushMessage>,
+//   ): Promise<ExpoPushMessage[]> {
+//     const messages = [];
 
-    for (const pushToken of tokens) {
-      if (!Expo.isExpoPushToken(pushToken)) {
-        continue;
-      }
+//     for (const pushToken of tokens) {
+//       if (!Expo.isExpoPushToken(pushToken)) {
+//         continue;
+//       }
 
-      // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
-      messages.push({
-        ...defaultExpoPushMessage,
-        ...message,
-        to: pushToken,
-      });
-    }
+//       // Construct a message (see https://docs.expo.io/push-notifications/sending-notifications/)
+//       messages.push({
+//         ...defaultExpoPushMessage,
+//         ...message,
+//         to: pushToken,
+//       });
+//     }
 
-    return messages;
-  }
+//     return messages;
+//   }
 
-  async sendPushNotification(messages: ExpoPushMessage[]) {
-    const chunks = expo.chunkPushNotifications(messages);
-    const tickets = [];
+//   async sendPushNotification(messages: ExpoPushMessage[]) {
+//     const chunks = expo.chunkPushNotifications(messages);
+//     const tickets = [];
 
-    for (const chunk of chunks) {
-      try {
-        const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-        tickets.push(...ticketChunk);
-      } catch (error: unknown) {
-        // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
-        console.error(error);
-      } finally {
-        this.tickets = tickets;
-      }
-    }
-  }
-}
+//     for (const chunk of chunks) {
+//       try {
+//         const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+//         tickets.push(...ticketChunk);
+//       } catch (error: unknown) {
+//         // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
+//         console.error(error);
+//       } finally {
+//         this.tickets = tickets;
+//       }
+//     }
+//   }
+// }
 
 // const receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
 // (async () => {

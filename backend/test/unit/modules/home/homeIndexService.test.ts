@@ -4,14 +4,14 @@ import { ReportedCompanyFindAllRepository } from '@modules/reported-company/repo
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { HomeIndexService } from '@modules/home/service/home-index.service';
 import { ReportedCompany } from '@shared/entities/reported-company.entity';
-import { UserReviewDetailsFindTopRepository } from '@modules/user-review-details/repositories/user-review-details-find-top.repository';
+import { ReviewDetailsFindTopRepository } from '@modules/review-details/repositories/review-details-find-top.repository';
 import { ReviewFindAllRepository } from '@modules/review/repositories/review-find-all.repository';
 import { Review } from '@shared/entities/review.entity';
 
 describe('/HomeService', () => {
   let homeService: HomeIndexService;
   let reportedCompanyFindAllRepository: ReportedCompanyFindAllRepository;
-  let userReviewDetailsFindTopRepository: UserReviewDetailsFindTopRepository;
+  let userReviewDetailsFindTopRepository: ReviewDetailsFindTopRepository;
   let reviewFindAllRepository: ReviewFindAllRepository;
 
   beforeAll(async () => {
@@ -21,7 +21,7 @@ describe('/HomeService', () => {
           provide: PrismaService,
           useValue: {},
         },
-        UserReviewDetailsFindTopRepository,
+        ReviewDetailsFindTopRepository,
         ReviewFindAllRepository,
         ReportedCompanyFindAllRepository,
         HomeIndexService,
@@ -31,7 +31,7 @@ describe('/HomeService', () => {
     homeService = ref.get(HomeIndexService);
 
     userReviewDetailsFindTopRepository = ref.get(
-      UserReviewDetailsFindTopRepository,
+      ReviewDetailsFindTopRepository,
     );
 
     reviewFindAllRepository = ref.get(ReviewFindAllRepository);
