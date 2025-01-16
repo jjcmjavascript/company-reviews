@@ -1,5 +1,6 @@
 import { ReportedCompany } from '@shared/entities/reported-company.entity';
 import { HomeIndexResponse } from '../home.interfaces';
+import { Review } from '@shared/entities/review.entity';
 
 export class HomeIndexService {
   constructor() {}
