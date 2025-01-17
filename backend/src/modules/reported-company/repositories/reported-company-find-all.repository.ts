@@ -8,15 +8,9 @@ export class ReportedCompanyFindAllRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async execute(where?: ReportedCompanyCriteria): Promise<ReportedCompany[]> {
-    let result = null;
-
-    if (where) {
-      result = await this.prismaService.reportedCompany.findMany({
-        where,
-      });
-    } else {
-      result = await this.prismaService.reportedCompany.findMany();
-    }
+    const result = await this.prismaService.reportedCompany.findMany({
+      where: where ? { ...where, deletedAt: null } : { deletedAt: null },
+    });
 
     return ReportedCompany.fromArray(result);
   }

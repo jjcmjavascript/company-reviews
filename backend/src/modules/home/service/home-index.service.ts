@@ -31,7 +31,6 @@ export class HomeIndexService {
 
       return this.format({ scores, reviews, companies });
     } catch (e) {
-      console.log(e);
       throw new InternalServerErrorException(
         'An error happend consulting the data',
       );
