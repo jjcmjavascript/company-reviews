@@ -3,8 +3,8 @@ import { IsOptional } from 'class-validator';
 
 export class ReportedCompanyIndexServiceDto {
   @IsOptional()
-  @Transform(({ value }) =>
-    !Number.isNaN(Number(value)) ? Math.abs(value) : 0,
-  )
+  @Transform(({ value }) => {
+    return Number.isNaN(Number(value)) ? 0 : Math.abs(Number(value));
+  })
   from?: number;
 }

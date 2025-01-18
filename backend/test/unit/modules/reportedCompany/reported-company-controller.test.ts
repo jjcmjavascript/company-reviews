@@ -5,6 +5,8 @@ import { ReportedCompanyIndexService } from '@modules/reported-company/service/r
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { ReportedCompanyFindAllPaginatedRepository } from '@modules/reported-company/repositories/reported-company-find-all-paginated.repository';
 import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
+import { ReportedCompanyIndexServiceDto } from '@modules/reported-company/reported-company.interfaces';
+import { plainToClass } from 'class-transformer';
 
 describe('ReportedCompanyController', () => {
   let controller: ReportedCompanyController;
@@ -33,19 +35,41 @@ describe('ReportedCompanyController', () => {
     query = ref.get(ReportedCompanyIndexQuery);
   });
 
-  it('ReportedCompanyController(Index)', async () => {
-    const params = {
-      from: 1,
-    };
+  it('ReportedCompanyController(Index) should transform string to number', async () => {
+    const params = plainToClass(ReportedCompanyIndexServiceDto, {
+      from: 'asd',
+    });
 
     jest.spyOn(query, 'execute').mockImplementation(async () => []);
 
     const controllerSpy = jest.spyOn(controller, 'index');
+
     const serviceSpy = jest.spyOn(service, 'execute');
+
     const response = await controller.index(params);
 
     expect(controllerSpy).toHaveBeenCalledWith(params);
+
+    expect(serviceSpy).toHaveBeenCalledWith({ id: 0 });
+
     expect(Array.isArray(response)).toBe(true);
-    expect(serviceSpy).toHaveBeenCalledWith(params);
+  });
+
+  it('ReportedCompanyController(Index) When a number is not provided should use 0', async () => {
+    const params = plainToClass(ReportedCompanyIndexServiceDto, {});
+
+    jest.spyOn(query, 'execute').mockImplementation(async () => []);
+
+    const controllerSpy = jest.spyOn(controller, 'index');
+
+    const serviceSpy = jest.spyOn(service, 'execute');
+
+    const response = await controller.index(params);
+
+    expect(controllerSpy).toHaveBeenCalledWith(params);
+
+    expect(serviceSpy).toHaveBeenCalledWith({ id: 0 });
+
+    expect(Array.isArray(response)).toBe(true);
   });
 });
