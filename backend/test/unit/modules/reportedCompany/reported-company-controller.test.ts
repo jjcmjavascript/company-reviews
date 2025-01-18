@@ -4,7 +4,7 @@ import { ReportedCompanyController } from '@modules/reported-company/reported-co
 import { ReportedCompanyIndexService } from '@modules/reported-company/service/reported-company-index.service';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { ReportedCompanyFindAllPaginatedRepository } from '@modules/reported-company/repositories/reported-company-find-all-paginated.repository';
-import { ReportedCompanyIndexQuery } from '@shared/services/querys/reported-company-index.query';
+import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
 
 describe('ReportedCompanyController', () => {
   let controller: ReportedCompanyController;

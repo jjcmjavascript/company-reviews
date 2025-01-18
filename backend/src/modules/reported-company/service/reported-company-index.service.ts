@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ReportedCompanyIndexServiceDto } from '../reported-company.interfaces';
-import { ReportedCompanyIndexQuery } from '@shared/services/querys/reported-company-index.query';
+import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
 
 @Injectable()
 export class ReportedCompanyIndexService {
