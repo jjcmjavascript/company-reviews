@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { SubTypeModule } from './modules/subtype/subtype.module';
 import { HomeModule } from '@modules/home/home.module';
+import { ReportedCompanyModule } from '@modules/reported-company/reported-company.module';
 
 const providers = [];
 
@@ -32,6 +33,7 @@ providers.push({
     UserModule,
     AuthModule,
     SubTypeModule,
+    ReportedCompanyModule,
     HomeModule,
   ],
   controllers: [],

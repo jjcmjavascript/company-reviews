@@ -1,13 +1,16 @@
-import { Controller, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ReportedCompanyIndexService } from './service/reported-company-index.service';
 import { ReportedCompanyIndexServiceDto } from './reported-company.interfaces';
+import { Public } from '@shared/decorators/public.decorator';
 
-@Controller()
+@Controller('companies')
 export class ReportedCompanyController {
   constructor(
     private readonly reportedCompanyIndexService: ReportedCompanyIndexService,
   ) {}
 
+  @Public()
+  @Get()
   async index(@Query() params: ReportedCompanyIndexServiceDto) {
     return await this.reportedCompanyIndexService.execute({
       id: params.from || 0,
