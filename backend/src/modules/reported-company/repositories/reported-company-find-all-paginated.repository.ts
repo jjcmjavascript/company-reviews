@@ -9,12 +9,12 @@ export class ReportedCompanyFindAllPaginatedRepository {
   async execute(where: Partial<ReportedCompanyPrimitive>) {
     const result = await this.prismaService.reportedCompany.findMany({
       where: {
-        name: {
-          contains: where.name,
-          mode: 'insensitive',
+        id: {
+          gt: where.id,
         },
         deletedAt: null,
       },
+      take: 20,
     });
 
     return result;

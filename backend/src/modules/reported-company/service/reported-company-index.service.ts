@@ -1,10 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ReportedCompanyIndexServiceDto } from '../reported-company.interfaces';
+import { ReportedCompanyIndexQuery } from '@shared/services/querys/reported-company-index.query';
 
 @Injectable()
 export class ReportedCompanyIndexService {
-  async execute(params) {
-    const paginatedCompanies = [];
+  constructor(private readonly rcQuery: ReportedCompanyIndexQuery) {}
 
-    return paginatedCompanies;
+  async execute(params: ReportedCompanyIndexServiceDto) {
+    try {
+      return this.rcQuery.execute({ from: params.from });
+    } catch {
+      throw new InternalServerErrorException(
+        'An error happened when list was loading',
+      );
+    }
   }
 }
