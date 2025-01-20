@@ -6,14 +6,10 @@ import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 export class ReportedCompanyCreateRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(createParams: Partial<ReportedCompanyPrimitive>) {
+  async execute(createParams: Omit<ReportedCompanyPrimitive, 'id'>[]) {
     this.prismaService.$transaction(async (ctx) => {
-      ctx.reportedCompany.create({
-        data: {
-          name: createParams.name,
-          description: createParams.description,
-          image: createParams.image,
-        },
+      ctx.reportedCompany.createMany({
+        data: [...createParams],
       });
     });
   }

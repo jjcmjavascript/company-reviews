@@ -1,6 +1,7 @@
 export interface ReportedCompanyPrimitive {
   id: number;
   name: string;
+  tax?: string;
   description?: string;
   image?: string;
 }
@@ -18,6 +19,7 @@ export class ReportedCompany {
       name: company.name,
       description: company.description,
       image: company.image,
+      tax: company.tax,
     });
   }
 
