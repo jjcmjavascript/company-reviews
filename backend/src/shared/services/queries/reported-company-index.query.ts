@@ -15,12 +15,13 @@ export class ReportedCompanyIndexQuery {
       ReportedCompanyIndexQueryResultItem[]
     >`
         SELECT "ReportedCompany".id as id, "ReportedCompany".name as name, ROUND(AVG("ReviewDetail".score), 2) as score , "SubType".name as "type"
-        from "Review"
-          JOIN "ReportedCompany" ON "ReportedCompany".id = "Review"."reportedCompanyId"
-          JOIN "ReviewDetail" ON "ReviewDetail"."reviewId" = "Review".id
-          JOIN "SubType" ON "ReviewDetail"."typeId" = "SubType".id
+        from "ReportedCompany"
+          LEFT JOIN "Review" ON "ReportedCompany".id = "Review"."reportedCompanyId"
+          LEFT JOIN "ReviewDetail" ON "ReviewDetail"."reviewId" = "Review".id
+          LEFT JOIN "SubType" ON "ReviewDetail"."typeId" = "SubType".id
         WHERE "ReportedCompany".id > ${from} AND "ReportedCompany"."deletedAt" IS NULL
         GROUP BY "ReportedCompany".id, "ReviewDetail"."typeId", "SubType".name
+        ORDER BY "ReportedCompany".id ASC
         LIMIT 20
     `;
 
