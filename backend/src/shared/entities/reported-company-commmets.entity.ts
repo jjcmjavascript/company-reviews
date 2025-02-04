@@ -13,7 +13,9 @@ export class ReportedCompanyComment {
     this.attributes = comment;
   }
 
-  static create(comment: Partial<ReportedCompanyComentPrimitive>): ReportedCompanyComment {
+  static create(
+    comment: Partial<ReportedCompanyComentPrimitive>,
+  ): ReportedCompanyComment {
     return new ReportedCompanyComment({
       id: comment.id,
       description: comment.description,
@@ -27,7 +29,9 @@ export class ReportedCompanyComment {
     return this.attributes;
   }
 
-  static fromArray(comments: Array<ReportedCompanyComentPrimitive>): Array<ReportedCompanyComment> {
+  static fromArray(
+    comments: Array<ReportedCompanyComentPrimitive>,
+  ): Array<ReportedCompanyComment> {
     return comments.map((comment) => new ReportedCompanyComment(comment));
   }
 

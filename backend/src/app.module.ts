@@ -11,6 +11,7 @@ import { AuthGuard } from './modules/auth/auth.guard';
 import { SubTypeModule } from './modules/subtype/subtype.module';
 import { HomeModule } from '@modules/home/home.module';
 import { ReportedCompanyModule } from '@modules/reported-company/reported-company.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 const providers = [];
 
@@ -28,6 +29,12 @@ providers.push({
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     SentryModule.forRoot(),
     // ScheduleModule.forRoot(),
     UserModule,
