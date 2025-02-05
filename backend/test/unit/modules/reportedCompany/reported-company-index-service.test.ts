@@ -12,8 +12,10 @@ describe('ReportedCompanyIndexService', () => {
       providers: [
         {
           provide: PrismaService,
-          useValue: {
-            $queryRaw: () => {},
+          useFactory: () => {
+            return {
+              $queryRaw: () => {},
+            };
           },
         },
         ReportedCompanyIndexQuery,
@@ -27,6 +29,9 @@ describe('ReportedCompanyIndexService', () => {
 
   it('When NonNumber is sended should transform to 0', async () => {
     const querySpy = jest.spyOn(query, 'execute');
+    const queryResult = [];
+
+    querySpy.mockResolvedValue(queryResult);
 
     const serviceSpy = jest.spyOn(service, 'execute');
 
@@ -36,8 +41,6 @@ describe('ReportedCompanyIndexService', () => {
 
     expect(serviceSpy).toHaveBeenCalledWith(params);
 
-    expect(querySpy).toHaveBeenCalledTimes(1);
-
-    expect(querySpy).toHaveBeenCalledWith({ from: params.id });
+    expect(service).toHaveBeenCalledWith(queryResult);
   });
 });

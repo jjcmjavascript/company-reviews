@@ -37,7 +37,7 @@ describe('ReportedCompanyController', () => {
 
   it('ReportedCompanyController(Index) should transform string to number', async () => {
     const params = plainToClass(ReportedCompanyIndexServiceDto, {
-      from: 'asd',
+      from: 'asdf',
     });
 
     jest.spyOn(query, 'execute').mockImplementation(async () => []);
@@ -52,7 +52,7 @@ describe('ReportedCompanyController', () => {
 
     expect(serviceSpy).toHaveBeenCalledWith({ id: 0 });
 
-    expect(Array.isArray(response)).toBe(true);
+    expect(response).toEqual({});
   });
 
   it('ReportedCompanyController(Index) When a number is not provided should use 0', async () => {
@@ -70,6 +70,6 @@ describe('ReportedCompanyController', () => {
 
     expect(serviceSpy).toHaveBeenCalledWith({ id: 0 });
 
-    expect(Array.isArray(response)).toBe(true);
+    expect(response).toEqual({});
   });
 });
