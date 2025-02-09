@@ -5,7 +5,7 @@ import { ReportedCompanyIndexService } from '@modules/reported-company/service/r
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { ReportedCompanyFindAllPaginatedRepository } from '@modules/reported-company/repositories/reported-company-find-all-paginated.repository';
 import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
-import { ReportedCompanyIndexServiceDto } from '@modules/reported-company/reported-company.interfaces';
+import { ReportedCompanyIndexServiceDto } from '@modules/reported-company/reported-company.dto';
 import { plainToClass } from 'class-transformer';
 
 describe('ReportedCompanyController', () => {

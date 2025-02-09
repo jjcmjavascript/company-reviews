@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ReportedCompanyIndexService } from './service/reported-company-index.service';
-import { ReportedCompanyIndexServiceDto } from './reported-company.interfaces';
+import { ReportedCompanyIndexServiceDto } from './reported-company.dto';
 import { Public } from '@shared/decorators/public.decorator';
 
 @Controller('companies')
