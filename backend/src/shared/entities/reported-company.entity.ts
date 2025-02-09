@@ -4,6 +4,7 @@ export interface ReportedCompanyPrimitive {
   tax?: string;
   description?: string;
   image?: string;
+  createdAt?: Date;
 }
 
 export class ReportedCompany {
@@ -20,6 +21,7 @@ export class ReportedCompany {
       description: company.description,
       image: company.image,
       tax: company.tax,
+      createdAt: company.createdAt,
     });
   }
 

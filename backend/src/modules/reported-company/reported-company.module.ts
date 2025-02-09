@@ -4,14 +4,18 @@ import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-com
 import { ReportedCompanyIndexService } from './service/reported-company-index.service';
 import { ReportedCompanyFindAllRepository } from './repositories/reported-company-find-all.repository';
 import { ReportedCompanyController } from './reported-company.controller';
+import { ReportedCompanyCreateService } from './service/reported-company-create.service';
+import { ReportedCompanyCreateRepository } from './repositories/reported-company-create.repository';
 
 @Module({
   imports: [PrismaModule],
   controllers: [ReportedCompanyController],
   providers: [
     ReportedCompanyIndexQuery,
-    ReportedCompanyIndexService,
     ReportedCompanyFindAllRepository,
+    ReportedCompanyCreateRepository,
+    ReportedCompanyIndexService,
+    ReportedCompanyCreateService,
   ],
   exports: [ReportedCompanyIndexService, ReportedCompanyFindAllRepository],
 })
