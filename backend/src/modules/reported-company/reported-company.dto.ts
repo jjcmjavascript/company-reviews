@@ -22,14 +22,14 @@ export class ReportedCompanyCreateDto {
   @MinLength(3)
   tax: string;
 
-  @IsString()
   @Optional()
+  @IsString()
   @MaxLength(250)
   @MinLength(10)
   description: string;
 
-  @IsString()
   @Optional()
+  @IsString()
   @MaxLength(250)
   @MinLength(6)
   image: string;
