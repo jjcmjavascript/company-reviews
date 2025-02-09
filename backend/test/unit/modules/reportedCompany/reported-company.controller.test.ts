@@ -8,7 +8,7 @@ import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-com
 import { ReportedCompanyIndexServiceDto } from '@modules/reported-company/reported-company.dto';
 import { plainToClass } from 'class-transformer';
 
-describe('ReportedCompanyController', () => {
+describe('[Controller] ReportedCompanyController', () => {
   let controller: ReportedCompanyController;
   let service: ReportedCompanyIndexService;
   let query: ReportedCompanyIndexQuery;

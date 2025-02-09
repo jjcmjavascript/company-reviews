@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
 
-describe('ReportedCompanyIndexService', () => {
+describe('[Service] ReportedCompanyIndexService', () => {
   let reportedCompanyIndexQuery: ReportedCompanyIndexQuery;
   let reportedCompanyIndexService: ReportedCompanyIndexService;
 
