@@ -4,8 +4,8 @@ import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
 
 describe('ReportedCompanyIndexService', () => {
-  let service: ReportedCompanyIndexService;
-  let query: ReportedCompanyIndexQuery;
+  let reportedCompanyIndexQuery: ReportedCompanyIndexQuery;
+  let reportedCompanyIndexService: ReportedCompanyIndexService;
 
   beforeAll(async () => {
     const ref = await Test.createTestingModule({
@@ -23,24 +23,74 @@ describe('ReportedCompanyIndexService', () => {
       ],
     }).compile();
 
-    query = ref.get(ReportedCompanyIndexQuery);
-    service = ref.get(ReportedCompanyIndexService);
+    reportedCompanyIndexQuery = ref.get(ReportedCompanyIndexQuery);
+    reportedCompanyIndexService = ref.get(ReportedCompanyIndexService);
   });
 
-  it('When NonNumber is sended should transform to 0', async () => {
-    const querySpy = jest.spyOn(query, 'execute');
-    const queryResult = [];
+  it('It should return an grouped array when has data', async () => {
+    const values = [
+      {
+        name: 'Company 1',
+        id: 1,
+        type: 'Type 1',
+        score: 1,
+      },
+      {
+        name: 'Company 2',
+        id: 2,
+        type: 'Type 2',
+        score: 2,
+      },
+      {
+        name: 'Company 2',
+        id: 2,
+        type: 'Type 3',
+        score: 3,
+      },
+    ];
+    const spyIndexQueryService = jest.spyOn(
+      reportedCompanyIndexQuery,
+      'execute',
+    );
 
-    querySpy.mockResolvedValue(queryResult);
+    spyIndexQueryService.mockResolvedValue(values);
 
-    const serviceSpy = jest.spyOn(service, 'execute');
+    const result = await reportedCompanyIndexService.execute({ id: 1 });
 
-    const params = { id: 1 };
+    expect(result).toEqual({
+      1: {
+        name: 'Company 1',
+        id: 1,
+        evaluation: [{ type: 'Type 1', score: 1 }],
+      },
+      2: {
+        name: 'Company 2',
+        id: 2,
+        evaluation: [
+          {
+            type: 'Type 2',
+            score: 2,
+          },
+          {
+            type: 'Type 3',
+            score: 3,
+          },
+        ],
+      },
+    });
+  });
 
-    await service.execute(params);
+  it('It should return an empty object when has no data', async () => {
+    const values = [];
+    const spyIndexQueryService = jest.spyOn(
+      reportedCompanyIndexQuery,
+      'execute',
+    );
 
-    expect(serviceSpy).toHaveBeenCalledWith(params);
+    spyIndexQueryService.mockResolvedValue(values);
 
-    expect(service).toHaveBeenCalledWith(queryResult);
+    const result = await reportedCompanyIndexService.execute({ id: 1 });
+
+    expect(result).toEqual({});
   });
 });

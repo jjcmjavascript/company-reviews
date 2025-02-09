@@ -9,6 +9,7 @@ export class ReportedCompanyIndexService {
   async execute(params: { id: number }) {
     try {
       const queryResult = await this.rcQuery.execute({ from: params.id || 0 });
+
       const transformResult = this.transform(queryResult);
 
       return transformResult;
