@@ -9,15 +9,6 @@ export const permissionList: Array<Permission> = [
     modules: [
       {
         name: Modules.User,
-        permissions: [PermissionActions.Read, PermissionActions.Write],
-      },
-    ],
-  },
-  {
-    role: Roles.Admin,
-    modules: [
-      {
-        name: Modules.User,
         permissions: [
           PermissionActions.Read,
           PermissionActions.Write,
