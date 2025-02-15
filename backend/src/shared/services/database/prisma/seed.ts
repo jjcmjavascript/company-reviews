@@ -14,7 +14,7 @@ async function main() {
       >,
     ).map((i) => ({
       name: i.name,
-      image: `https://raw.githubusercontent.com/jjcmjavascript/companiesImages/refs/heads/main/${i.name}.jpeg`,
+      imageUrl: `https://raw.githubusercontent.com/jjcmjavascript/companiesImages/refs/heads/main/${i.name}.jpeg`,
     }));
 
     await prisma.reportedCompany.createMany({

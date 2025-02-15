@@ -16,6 +16,8 @@ CREATE TABLE "Password" (
     "id" SERIAL NOT NULL,
     "password" VARCHAR NOT NULL,
     "userId" INTEGER NOT NULL,
+    "deletedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Password_pkey" PRIMARY KEY ("id")
 );
@@ -25,6 +27,8 @@ CREATE TABLE "UserRole" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deletedAt" TIMESTAMP,
 
     CONSTRAINT "UserRole_pkey" PRIMARY KEY ("id")
 );
@@ -33,9 +37,11 @@ CREATE TABLE "UserRole" (
 CREATE TABLE "ReportedCompany" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
+    "tax" VARCHAR,
     "description" TEXT,
-    "image" VARCHAR,
+    "imageUrl" VARCHAR,
     "deletedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ReportedCompany_pkey" PRIMARY KEY ("id")
 );
@@ -43,10 +49,10 @@ CREATE TABLE "ReportedCompany" (
 -- CreateTable
 CREATE TABLE "ReportedCompanyComment" (
     "id" SERIAL NOT NULL,
-    "description" TEXT NOT NULL,
-    "image" VARCHAR,
     "reportedCompanyId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
+    "description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deletedAt" TIMESTAMP,
 
     CONSTRAINT "ReportedCompanyComment_pkey" PRIMARY KEY ("id")
@@ -57,43 +63,56 @@ CREATE TABLE "Review" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "reportedCompanyId" INTEGER NOT NULL,
+    "reviewerTypeId" INTEGER NOT NULL,
     "review" TEXT,
+    "verificationStatus" TEXT,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deletedAt" TIMESTAMP,
 
     CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ReviewDetail" (
+CREATE TABLE "ReviewerType" (
+    "id" SERIAL NOT NULL,
+    "name" VARCHAR NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deletedAt" TIMESTAMP,
+
+    CONSTRAINT "ReviewerType_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ReviewerTypeCategory" (
     "id" SERIAL NOT NULL,
     "typeId" INTEGER NOT NULL,
+    "categoryId" INTEGER NOT NULL,
+
+    CONSTRAINT "ReviewerTypeCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ReviewDetail" (
+    "id" SERIAL NOT NULL,
+    "categoryId" INTEGER NOT NULL,
     "description" TEXT,
     "score" INTEGER NOT NULL,
     "reviewId" INTEGER NOT NULL,
     "deletedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ReviewDetail_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Type" (
+CREATE TABLE "Category" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "description" TEXT,
     "deletedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Type_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "SubType" (
-    "id" SERIAL NOT NULL,
-    "name" VARCHAR NOT NULL,
-    "description" TEXT,
-    "typeId" INTEGER NOT NULL,
-    "deletedAt" TIMESTAMP,
-
-    CONSTRAINT "SubType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -124,10 +143,13 @@ ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") 
 ALTER TABLE "Review" ADD CONSTRAINT "Review_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ReviewerTypeCategory" ADD CONSTRAINT "ReviewerTypeCategory_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "ReviewerType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewerTypeCategory" ADD CONSTRAINT "ReviewerTypeCategory_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "SubType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "SubType" ADD CONSTRAINT "SubType_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "Type"("id") ON DELETE CASCADE ON UPDATE CASCADE;
