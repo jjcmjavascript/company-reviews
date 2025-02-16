@@ -59,6 +59,18 @@ La primera vez que se ejecute se creara la base de datos | The first time you ru
   docker-compose up --build -d
 ```
 
+### Ejecutar test en docker - Run test in docker
+
+```bash
+  docker exec -it backend-nest sh
+```
+
+Una vez dentro del contenedor | Once inside the container
+
+```bash
+  npm run test
+```
+
 ## Inslacion regular - Regular installation - Requisitos
 
 Node version 20.0.0+
