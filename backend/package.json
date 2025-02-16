@@ -6,7 +6,7 @@
   "private": true,
   "license": "GPL-3.0-only",
   "scripts": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} ./src/shared/services/database/prisma/seed.ts",
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' ./src/shared/services/database/prisma/seed.ts",
     "db:create": "ts-node ./src/scripts/create-db.ts",
     "db:drop": "ts-node ./src/scripts/drop-db.ts",
     "build": "nest build",

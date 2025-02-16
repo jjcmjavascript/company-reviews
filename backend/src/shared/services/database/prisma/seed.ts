@@ -6,20 +6,23 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    const fileContent = fs.readFileSync('seed.json', 'utf-8');
-    const toHash = Object.values(
-      JSON.parse(fileContent) as Record<
-        string,
-        { name: string; image: string }
-      >,
-    ).map((i) => ({
-      name: i.name,
-      imageUrl: `https://raw.githubusercontent.com/jjcmjavascript/companiesImages/refs/heads/main/${i.name}.jpeg`,
-    }));
+    const checkIfFileExists = fs.existsSync('seed.json');
+    if (checkIfFileExists) {
+      const fileContent = fs.readFileSync('seed.json', 'utf-8');
+      const toHash = Object.values(
+        JSON.parse(fileContent) as Record<
+          string,
+          { name: string; image: string }
+        >,
+      ).map((i) => ({
+        name: i.name,
+        imageUrl: `https://raw.githubusercontent.com/jjcmjavascript/companiesImages/refs/heads/main/${i.name}.jpeg`,
+      }));
 
-    await prisma.reportedCompany.createMany({
-      data: toHash,
-    });
+      await prisma.reportedCompany.createMany({
+        data: toHash,
+      });
+    }
   } catch (e) {
     console.error(e);
   }
