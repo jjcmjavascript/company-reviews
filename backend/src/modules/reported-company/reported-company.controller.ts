@@ -5,7 +5,6 @@ import {
   ReportedCompanyIndexServiceDto,
   ReportedCompanySearchDto,
 } from './reported-company.dto';
-import { Public } from '@shared/decorators/public.decorator';
 import { HasRoles } from '@shared/decorators/user-roles.decorator';
 import { Roles } from '@shared/services/permission/types/roles.enum';
 import { ReportedCompanyCreateService } from './service/reported-company-create.service';
@@ -19,7 +18,6 @@ export class ReportedCompanyController {
     private readonly reportedCompanySearchService: ReportedCompanySearchService,
   ) {}
 
-  @Public()
   @Get()
   async index(@Query() params: ReportedCompanyIndexServiceDto) {
     return await this.reportedCompanyIndexService.execute({
