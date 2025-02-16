@@ -32,3 +32,4 @@ services:
       - ./src:/app/src
     depends_on:
       - reportedcompanydb
+    command: [ "sh", "-c", "npx prisma migrate deploy && npm run dev" ]

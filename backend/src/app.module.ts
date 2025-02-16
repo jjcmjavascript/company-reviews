@@ -8,7 +8,6 @@ import { config } from '@config/config';
 import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
-import { SubTypeModule } from './modules/subtype/subtype.module';
 import { HomeModule } from '@modules/home/home.module';
 import { ReportedCompanyModule } from '@modules/reported-company/reported-company.module';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -39,7 +38,6 @@ providers.push({
     // ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
-    SubTypeModule,
     ReportedCompanyModule,
     HomeModule,
   ],
