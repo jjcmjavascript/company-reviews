@@ -1,6 +1,65 @@
 ## Guia de Instalacion - Installation Guide
 
-## Requisitos
+## Para todas las instancialaciones - For all installations
+
+### Crear archivo .env - Create .env file
+
+```bash
+cp example.env .env
+```
+
+### Configurar archivo .env - Configure .env file
+
+los valores estan en: https://trello.com/c/qxPbMVZX/8-env-backend
+
+```bash
+nano .env
+```
+
+o puede mover el archivo .env.example a .env y cambiar los valores
+
+```bash
+mv .env.example .env
+```
+
+Si vas a usar docker debes cambiar el valor de DATABASE_URL y PORT por
+DATABASE_PORT=5433
+DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@reportedcompanydb:${DATABASE_PORT}/${DATABASE_NAME}?schema=public&sslmode=prefer"
+
+## Instalacion - Docker - dev
+
+### Requisitos - Requirements
+
+Docker version 20.10.0+
+
+### Darle permisos de ejecucion al archivo: dev-entry.sh - Give execute permissions to the file: dev-entry.sh
+
+En ubuntu | In ubuntu
+
+```bash
+chmod +x dev-entry.sh
+```
+
+Si no puedes darle permisos al archivo puedes
+
+descomentar la linea : command: [ "sh", "-c", "npx prisma migrate deploy && npx prisma generate && npm run dev" ] en el archivo docker-compose.yml
+y comentar: command: [ "./dev-entry.sh" ] en el archivo docker-compose.yml
+
+### Correr el proyecto - Run the project
+
+La primera vez que se ejecute se creara la base de datos | The first time you run it, the database will be created
+
+```bash
+  docker-compose up --build
+```
+
+### Correr el proyecto en segundo plano - Run the project in the background
+
+```bash
+  docker-compose up --build -d
+```
+
+## Inslacion regular - Regular installation - Requisitos
 
 Node version 20.0.0+
 postgresql version 16.0.0+
@@ -15,24 +74,6 @@ You need instal donenv-cli to use different .env files and execute test
 
 ```bash
 npm install -g dotenv-cli
-```
-
-### Crear archivo .env - Create .env file
-
-```bash
-cp example.env .env
-```
-
-### Configurar archivo .env - Configure .env file
-
-los valores estan en: https://trello.com/c/qxPbMVZX/8-env-backend
-
-Si vas a usar docker debes cambiar el valor de DATABASE_URL y PORT por
-DATABASE_PORT=5433
-DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@reportedcompanydb:${DATABASE_PORT}/${DATABASE_NAME}?schema=public&sslmode=prefer"
-
-```bash
-nano .env
 ```
 
 ### Crea la base de datos - Create database
