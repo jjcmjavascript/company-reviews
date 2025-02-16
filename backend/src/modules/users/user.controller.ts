@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UserCreateRepository } from './repositories/user-create.repository';
 import { UserFindAllRepository } from './repositories/user-find-all.repository';
 import { UserCreateDto } from './user.dto';
@@ -7,7 +7,6 @@ import { UserFindOneRepository } from './repositories/user-find-one.repository';
 import { arrayEntityToHash } from '@shared/helpers/array-entity-to-hash.helper';
 import { HasRoles } from '@shared/decorators/user-roles.decorator';
 import { Roles } from '@shared/services/permission/types/roles.enum';
-import { UserRolesGuard } from '@modules/user-roles/user-roles.guard';
 
 @Controller('users')
 export class UserController {
@@ -19,7 +18,6 @@ export class UserController {
 
   @Get()
   @HasRoles(Roles.Admin)
-  @UseGuards(UserRolesGuard)
   async findAll() {
     const users = await this.findAllService.execute();
 

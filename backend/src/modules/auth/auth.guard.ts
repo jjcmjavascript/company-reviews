@@ -8,9 +8,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { config } from '@config/config';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from '@decorators/public.decorator';
 import { Reflector } from '@nestjs/core';
 import { AuthJwtRefreshRepository } from './repositories/auth-jwt-refresh.repository';
+import { IS_LOGED_KEY } from '@shared/decorators/loged.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,12 +21,12 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.get<boolean>(
-      IS_PUBLIC_KEY,
+    const hasTobeLoged = this.reflector.get<boolean>(
+      IS_LOGED_KEY,
       context.getHandler(),
     );
 
-    if (isPublic) {
+    if (!hasTobeLoged) {
       return true;
     }
 

@@ -8,13 +8,11 @@ import {
 } from '@nestjs/common';
 import { AuthJwtSingInRepostory } from './repositories/auth-jwt-sigin.repository';
 import { SignInDto } from './auth.dto';
-import { Public } from '@decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authJwtSingInRepostory: AuthJwtSingInRepostory) {}
 
-  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(

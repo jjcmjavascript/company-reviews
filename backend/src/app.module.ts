@@ -11,6 +11,8 @@ import { AuthGuard } from './modules/auth/auth.guard';
 import { HomeModule } from '@modules/home/home.module';
 import { ReportedCompanyModule } from '@modules/reported-company/reported-company.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { UserRolesGuard } from './modules/user-roles/user-roles.guard';
+import { UserRolesModule } from '@modules/user-roles/user-roles.module';
 
 const providers = [];
 
@@ -24,6 +26,11 @@ if (config.app.isProduction) {
 providers.push({
   provide: 'APP_GUARD',
   useClass: AuthGuard,
+});
+
+providers.push({
+  provide: 'APP_GUARD',
+  useClass: UserRolesGuard,
 });
 
 @Module({
@@ -40,6 +47,7 @@ providers.push({
     AuthModule,
     ReportedCompanyModule,
     HomeModule,
+    UserRolesModule,
   ],
   controllers: [],
   providers,
