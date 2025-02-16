@@ -14,7 +14,7 @@ export class ReportedCompanyCreateRepository {
         data: {
           name: createParams.name,
           description: createParams.description,
-          image: createParams.image,
+          imageUrl: createParams.imageUrl,
         },
       });
     });

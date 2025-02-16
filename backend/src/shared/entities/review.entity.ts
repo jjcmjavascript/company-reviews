@@ -2,6 +2,11 @@ export interface ReviewPrimitive {
   id: number;
   userId: number;
   reportedCompanyId: number;
+  reviewerTypeId: number;
+  review: string;
+  verificationStatus: string;
+  createdAt: Date;
+  deletedAt?: Date;
 }
 
 export class Review {
@@ -16,6 +21,11 @@ export class Review {
       id: review.id,
       userId: review.userId,
       reportedCompanyId: review.reportedCompanyId,
+      reviewerTypeId: review.reviewerTypeId,
+      review: review.review,
+      verificationStatus: review.verificationStatus,
+      createdAt: review.createdAt,
+      deletedAt: review.deletedAt,
     });
   }
 

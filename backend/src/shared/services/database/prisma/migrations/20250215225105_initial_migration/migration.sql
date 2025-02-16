@@ -95,7 +95,6 @@ CREATE TABLE "ReviewerTypeCategory" (
 CREATE TABLE "ReviewDetail" (
     "id" SERIAL NOT NULL,
     "categoryId" INTEGER NOT NULL,
-    "description" TEXT,
     "score" INTEGER NOT NULL,
     "reviewId" INTEGER NOT NULL,
     "deletedAt" TIMESTAMP,

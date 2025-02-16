@@ -94,15 +94,14 @@ model ReviewerTypeCategory {
 }
 
 model ReviewDetail {
-  id          Int       @id @default(autoincrement())
-  categoryId  Int
-  description String?   @db.Text()
-  score       Int
-  reviewId    Int
-  deletedAt   DateTime? @db.Timestamp()
-  createdAt   DateTime  @default(now()) @db.Timestamp()
-  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  review      Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  id         Int       @id @default(autoincrement())
+  categoryId Int
+  score      Int
+  reviewId   Int
+  deletedAt  DateTime? @db.Timestamp()
+  createdAt  DateTime  @default(now()) @db.Timestamp()
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  review     Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model Category {

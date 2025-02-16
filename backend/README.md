@@ -3,7 +3,7 @@
 ## Requisitos
 
 Node version 20.0.0+
-postgresql version 13.0.0+
+postgresql version 16.0.0+
 
 ### Instalacion de dependencias - Install dependencies
 
@@ -25,6 +25,12 @@ cp example.env .env
 
 ### Configurar archivo .env - Configure .env file
 
+los valores estan en: https://trello.com/c/qxPbMVZX/8-env-backend
+
+Si vas a usar docker debes cambiar el valor de DATABASE_URL y PORT por
+DATABASE_PORT=5433
+DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@reportedcompanydb:${DATABASE_PORT}/${DATABASE_NAME}?schema=public&sslmode=prefer"
+
 ```bash
 nano .env
 ```
@@ -40,7 +46,7 @@ npm run db:create
 ### Correr migraciones - Run migrations
 
 ```bash
-npm run migration:migrate
+npx prisma migrate deploy
 ```
 
 ### Ejecutar el proyecto - Run the project

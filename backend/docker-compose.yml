@@ -1,8 +1,8 @@
 services:
-  maindb:
+  reportedcompanydb:
+    container_name: reportedcompanydb
     image: postgres:17.2-alpine3.21
     restart: always
-    container_name: postgres
     env_file:
       - .env
     environment:
@@ -18,10 +18,10 @@ services:
     command: -p ${DATABASE_PORT}
 
   backend:
+    container_name: backend-nest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend-nest
     env_file:
       - .env
     environment:
@@ -31,4 +31,4 @@ services:
     volumes:
       - ./src:/app/src
     depends_on:
-      - maindb
+      - reportedcompanydb
