@@ -34,3 +34,10 @@ export class ReportedCompanyCreateDto {
   @MinLength(6)
   imageUrl: string;
 }
+
+export class ReportedCompanySearchDto {
+  @IsString()
+  @MaxLength(100)
+  @MinLength(3)
+  search: string;
+}

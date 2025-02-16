@@ -4,11 +4,11 @@ import { HomeIndexService } from './service/home-index.service';
 
 @Controller('/')
 export class HomeController {
-  constructor(private readonly homeRepository: HomeIndexService) {}
+  constructor(private readonly homeIndexService: HomeIndexService) {}
 
   @Get()
   async index(): Promise<HomeIndexResponse[]> {
-    const result = await this.homeRepository.execute();
+    const result = await this.homeIndexService.execute();
 
     return result;
   }

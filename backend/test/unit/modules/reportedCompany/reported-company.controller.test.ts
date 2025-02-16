@@ -14,6 +14,8 @@ import { ReportedCompanyCreateService } from '@modules/reported-company/service/
 import { ReportedCompany } from '@shared/entities/reported-company.entity';
 import { ReportedCompanyCreateRepository } from '@modules/reported-company/repositories/reported-company-create.repository';
 import { mockDeep } from 'jest-mock-extended';
+import { ReportedCompanySearchService } from '@modules/reported-company/service/reported-company-search.service';
+import { ReportedCompanySearchRepository } from '@modules/reported-company/repositories/reported-company-search.repository';
 
 const prismaMock = mockDeep<PrismaService>();
 const globalRef = Test.createTestingModule({
@@ -24,8 +26,11 @@ const globalRef = Test.createTestingModule({
     },
     ReportedCompanyIndexQuery,
     ReportedCompanyCreateRepository,
+    ReportedCompanySearchRepository,
+
     ReportedCompanyIndexService,
     ReportedCompanyCreateService,
+    ReportedCompanySearchService,
   ],
   controllers: [ReportedCompanyController],
 }).compile();

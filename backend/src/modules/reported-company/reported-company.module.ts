@@ -6,6 +6,8 @@ import { ReportedCompanyFindAllRepository } from './repositories/reported-compan
 import { ReportedCompanyController } from './reported-company.controller';
 import { ReportedCompanyCreateService } from './service/reported-company-create.service';
 import { ReportedCompanyCreateRepository } from './repositories/reported-company-create.repository';
+import { ReportedCompanySearchService } from './service/reported-company-search.service';
+import { ReportedCompanySearchRepository } from './repositories/reported-company-search.repository';
 
 @Module({
   imports: [PrismaModule],
@@ -14,8 +16,11 @@ import { ReportedCompanyCreateRepository } from './repositories/reported-company
     ReportedCompanyIndexQuery,
     ReportedCompanyFindAllRepository,
     ReportedCompanyCreateRepository,
+    ReportedCompanySearchRepository,
+
     ReportedCompanyIndexService,
     ReportedCompanyCreateService,
+    ReportedCompanySearchService,
   ],
   exports: [ReportedCompanyIndexService, ReportedCompanyFindAllRepository],
 })
