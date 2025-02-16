@@ -103,7 +103,7 @@ describe('[Controller] ReportedCompanyController (Index - Create)', () => {
       name: 'Company 1',
       tax: '2700909123',
       description: 'compamny equis',
-      image: 'image.jpg',
+      imageUrl: 'image.jpg',
     };
 
     spyCreateService.mockImplementation(async () => {
@@ -146,7 +146,7 @@ describe('[Controller] ReportedCompanyController (Index - Create)', () => {
       name: 'Company 1',
       tax: '2700909123',
       description: 'compamny equis',
-      image: 'image.jpg',
+      imageUrl: 'image.jpg',
       createdAt: new Date(),
     };
     const spyCreateService = jest.spyOn(createService, 'execute');

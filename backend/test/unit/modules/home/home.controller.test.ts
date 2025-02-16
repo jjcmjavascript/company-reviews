@@ -72,7 +72,15 @@ describe('HomeController', () => {
     jest
       .spyOn(reviewFindAllRepository, 'execute')
       .mockImplementationOnce(async () => [
-        new Review({ id: 2, userId: 2, reportedCompanyId: 2 }),
+        new Review({
+          id: 2,
+          userId: 2,
+          reportedCompanyId: 2,
+          reviewerTypeId: 2,
+          review: 'zurd',
+          verificationStatus: 'verified',
+          createdAt: new Date(),
+        }),
       ]);
 
     jest

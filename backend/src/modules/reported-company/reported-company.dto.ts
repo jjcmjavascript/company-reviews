@@ -32,5 +32,5 @@ export class ReportedCompanyCreateDto {
   @IsString()
   @MaxLength(250)
   @MinLength(6)
-  image: string;
+  imageUrl: string;
 }
