@@ -85,7 +85,7 @@ CREATE TABLE "ReviewerType" (
 -- CreateTable
 CREATE TABLE "ReviewerTypeCategory" (
     "id" SERIAL NOT NULL,
-    "typeId" INTEGER NOT NULL,
+    "reviewerTypeId" INTEGER NOT NULL,
     "categoryId" INTEGER NOT NULL,
 
     CONSTRAINT "ReviewerTypeCategory_pkey" PRIMARY KEY ("id")
@@ -136,13 +136,16 @@ ALTER TABLE "ReportedCompanyComment" ADD CONSTRAINT "ReportedCompanyComment_repo
 ALTER TABLE "ReportedCompanyComment" ADD CONSTRAINT "ReportedCompanyComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Review" ADD CONSTRAINT "Review_reviewerTypeId_fkey" FOREIGN KEY ("reviewerTypeId") REFERENCES "ReviewerType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ReviewerTypeCategory" ADD CONSTRAINT "ReviewerTypeCategory_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "ReviewerType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ReviewerTypeCategory" ADD CONSTRAINT "ReviewerTypeCategory_reviewerTypeId_fkey" FOREIGN KEY ("reviewerTypeId") REFERENCES "ReviewerType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ReviewerTypeCategory" ADD CONSTRAINT "ReviewerTypeCategory_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;

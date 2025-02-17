@@ -45,6 +45,11 @@ Si no puedes darle permisos al archivo puedes
 descomentar la linea : command: [ "sh", "-c", "npx prisma migrate deploy && npx prisma generate && npm run dev" ] en el archivo docker-compose.yml
 y comentar: command: [ "./dev-entry.sh" ] en el archivo docker-compose.yml
 
+### Inyectar seeds en la base de datos - Inject seeds into the database
+
+para que al levantar el contenedor se inyecten los seeds en la base de datos
+debe agregar el archivo seed.json a la raiz del proyecto
+
 ### Correr el proyecto - Run the project
 
 La primera vez que se ejecute se creara la base de datos | The first time you run it, the database will be created
