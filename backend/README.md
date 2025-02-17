@@ -30,7 +30,7 @@ DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@reportedcompany
 
 ### Requisitos - Requirements
 
-Docker version 20.10.0+
+Docker version 22.10.0+
 
 ### Darle permisos de ejecucion al archivo: dev-entry.sh - Give execute permissions to the file: dev-entry.sh
 

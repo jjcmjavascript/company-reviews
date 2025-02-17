@@ -1,6 +1,6 @@
 export interface ReviewDetailPrimitive {
   id: number;
-  typeId: number;
+  categoryId: number;
   description?: string;
   reportedCompanyId: number;
   score: number;
@@ -17,7 +17,7 @@ export class ReviewDetail {
   static create(detail: Partial<ReviewDetailPrimitive>): ReviewDetail {
     return new ReviewDetail({
       id: detail.id,
-      typeId: detail.typeId,
+      categoryId: detail.categoryId,
       description: detail.description,
       reportedCompanyId: detail.reportedCompanyId,
       score: detail.score,

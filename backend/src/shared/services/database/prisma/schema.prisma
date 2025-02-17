@@ -73,6 +73,7 @@ model Review {
   createdAt          DateTime        @default(now()) @db.Timestamp()
   deletedAt          DateTime?       @db.Timestamp()
   reviewDetails      ReviewDetail[]
+  reviewerType       ReviewerType    @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   reportedCompany    ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
 }
@@ -83,14 +84,15 @@ model ReviewerType {
   createdAt          DateTime               @default(now()) @db.Timestamp()
   deletedAt          DateTime?              @db.Timestamp()
   reviewTypeCategory ReviewerTypeCategory[]
+  Review             Review[]
 }
 
 model ReviewerTypeCategory {
-  id         Int          @id @default(autoincrement())
-  typeId     Int
-  categoryId Int
-  type       ReviewerType @relation(fields: [typeId], references: [id], onDelete: Cascade)
-  category   Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  id             Int          @id @default(autoincrement())
+  reviewerTypeId Int
+  categoryId     Int
+  type           ReviewerType @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
+  category       Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model ReviewDetail {
