@@ -1,0 +1,9 @@
+.navigation-root {
+  display: flex;
+  height: inherit;
+}
+
+.navigation-main {
+  display: flex;
+  padding: 24px;
+}
