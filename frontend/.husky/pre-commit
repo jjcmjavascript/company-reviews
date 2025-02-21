@@ -3,7 +3,7 @@
 
 echo '🏗️👷 Styling, testing and building your project before committing'
 
-yarn run format:staged && yarn run lint:staged ||
+npm run format:staged && npm run lint:staged ||
 (
     echo '🤢🤮🤢🤮 Its RAW - Your styling looks disgusting. 🤢🤮🤢🤮
             Prettier Check Failed. Run yarn run lint:fix, add changes and try commit again.';

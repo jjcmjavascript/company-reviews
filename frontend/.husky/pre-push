@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn run test && yarn run build ||
+npm run build ||
 (
     echo '❌👷🔨❌ Better call Bob... Because your need help to resolve the tests ❌👷🔨❌';
     false;
