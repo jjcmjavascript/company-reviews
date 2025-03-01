@@ -6,4 +6,7 @@
 .navigation-main {
   display: flex;
   padding: 24px;
+  margin-top: 64px;
+  flex-grow: 1;
+  -moz-box-flex: 1;
 }

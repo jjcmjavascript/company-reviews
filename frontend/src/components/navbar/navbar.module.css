@@ -1,0 +1,16 @@
+.navbar-header {
+  display: flex;
+  height: inherit;
+  width: 100%;
+  height: 64px;
+  position: fixed;
+}
+
+.navbar-menu {
+  color: white;
+  background: transparent;
+}
+
+.navbar-menu > li > span {
+  color: white;
+}

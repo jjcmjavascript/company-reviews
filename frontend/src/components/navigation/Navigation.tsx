@@ -1,7 +1,7 @@
 
 import Navbar from 'components/navbar/Navbar';
 import styles from './navigation.module.css';
-import { NavigationProps } from './types/props/NavigationProps';
+import { NavigationProps } from './types/props/navigationProps';
 
 export const Navigation = ({ children }: NavigationProps) => {
   return (
