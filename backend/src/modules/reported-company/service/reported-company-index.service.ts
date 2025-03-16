@@ -1,19 +1,41 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { ReportedCompanyIndexQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
 import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
+import { isPositiveNumber } from '@shared/helpers/number.helper';
+import { ReportedCompanyIndexResponse } from '../reported-company.interface';
 
 @Injectable()
 export class ReportedCompanyIndexService {
+  private logger = new Logger(ReportedCompanyIndexService.name);
+
   constructor(private readonly rcQuery: ReportedCompanyIndexQuery) {}
 
-  async execute(params: { id: number }) {
+  async execute(params: {
+    id: unknown;
+  }): Promise<ReportedCompanyIndexResponse> {
+    const idToNumber = Number(params.id);
+
+    if (!isPositiveNumber(idToNumber)) {
+      this.logger.error('Invalid id', idToNumber);
+      throw new BadRequestException('Invalid id');
+    }
+
     try {
-      const queryResult = await this.rcQuery.execute({ from: params.id || 0 });
+      const queryResult = await this.rcQuery.execute({ from: idToNumber });
 
       const transformResult = this.transform(queryResult);
 
       return transformResult;
-    } catch {
+    } catch (e: unknown) {
+      this.logger.error(
+        `An error happened when list was loading ${(e as Error).message}`,
+      );
+
       throw new InternalServerErrorException(
         'An error happened when list was loading',
       );
