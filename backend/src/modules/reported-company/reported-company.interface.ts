@@ -11,3 +11,16 @@ export interface ReportedCompanyWhere {
 export type ReportedCompanyCriteria =
   | ReportedCompanyWhereIn
   | ReportedCompanyWhere;
+
+export interface ReportedCompanyIndexResponse {
+  [companyId: number]: {
+    name: string;
+    id: number;
+    evaluation: CompanyEvaluation[];
+  };
+}
+
+interface CompanyEvaluation {
+  type: string;
+  score: number;
+}
