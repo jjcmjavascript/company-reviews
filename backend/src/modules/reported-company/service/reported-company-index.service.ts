@@ -8,6 +8,7 @@ import { ReportedCompanyIndexQueryResultItem } from '@shared/interfaces/reported
 import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
 import { isPositiveNumber } from '@shared/helpers/number.helper';
 import { ReportedCompanyIndexResponse } from '../reported-company.interface';
+import { isEmpty } from 'class-validator';
 
 @Injectable()
 export class ReportedCompanyIndexService {
@@ -20,7 +21,7 @@ export class ReportedCompanyIndexService {
   }): Promise<ReportedCompanyIndexResponse> {
     const idToNumber = Number(params.id);
 
-    if (!isPositiveNumber(idToNumber)) {
+    if (!isEmpty(params.id) && !isPositiveNumber(idToNumber)) {
       this.logger.error('Invalid id', idToNumber);
       throw new BadRequestException('Invalid id');
     }

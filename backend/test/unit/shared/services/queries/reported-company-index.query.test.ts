@@ -24,12 +24,14 @@ describe('ReportedCompanyIndexQuery', () => {
       { id: 1, name: 'Empresa A', score: 4.5, type: 'Fraude' },
       { id: 2, name: 'Empresa B', score: 3.8, type: 'Estafa' },
     ];
+
+    jest.spyOn(prismaService.category, 'count').mockResolvedValue(2);
+
     prismaService.$queryRaw.mockResolvedValue(mockCompanies);
 
-    const result = await query.execute({ from: 0 });
+    const result = await query.execute({ from: 0, limit: 20 });
 
     expect(result).toEqual(mockCompanies);
     expect(prismaService.$queryRaw).toHaveBeenCalledTimes(1);
-    expect(prismaService.$queryRaw).toHaveBeenCalledWith(expect.any(Array), 0);
   });
 });

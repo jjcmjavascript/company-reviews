@@ -6,5 +6,5 @@ export const isNumber = (value: unknown): boolean => {
 };
 
 export const isPositiveNumber = (value: unknown): boolean => {
-  return isNumber(value) && Number(value) > 0;
+  return isNumber(value) && Number(value) > -1;
 };
