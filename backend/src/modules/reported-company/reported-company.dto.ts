@@ -1,4 +1,3 @@
-import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
 import {
   IsIn,
@@ -53,19 +52,19 @@ export class ReportedCompanyCreateDto {
   @MinLength(3)
   name: string;
 
-  @Optional()
+  @IsOptional()
   @IsString()
   @MaxLength(150)
   @MinLength(3)
-  tax: string;
+  tax?: string;
 
-  @Optional()
+  @IsOptional()
   @IsString()
   @MaxLength(250)
   @MinLength(10)
   description: string;
 
-  @Optional()
+  @IsOptional()
   @IsString()
   @MaxLength(250)
   @MinLength(6)

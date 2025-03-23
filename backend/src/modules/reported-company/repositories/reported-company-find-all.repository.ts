@@ -12,7 +12,7 @@ export class ReportedCompanyFindAllRepository {
 
   async execute(
     where?: ReportedCompanyWhere,
-    limit: number = 5,
+    limit: number = 10,
   ): Promise<ReportedCompanyPrimitive[]> {
     const result = await this.prismaService.reportedCompany.findMany({
       where: where ? { ...where, deletedAt: null } : { deletedAt: null },

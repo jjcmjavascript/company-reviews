@@ -1,3 +1,5 @@
+const { Roles } = require('../../permission/types/roles.enum');
+
 const { PrismaClient } = require('@prisma/client');
 const argon2 = require('argon2');
 const fs = require('node:fs');
@@ -93,11 +95,8 @@ async function main() {
 
   await prisma.$transaction(async (tx) => {
     const toHash = getCompaniesFromFile();
-    const hashedPassword = await argon2.hash(
-      process.env.SISTEMA_PASSWORD ?? '',
-    );
+    const hashedPassword = await argon2.hash(process.env.SYSTEM_PASSWORD ?? '');
 
-    // Insert data
     const reportedCompanies = await tx.reportedCompany.createManyAndReturn({
       data: toHash,
       skipDuplicates: true,
@@ -127,23 +126,31 @@ async function main() {
 
     const reviewRaws = getReview(reportedCompanies);
 
-    // Create password, bridging table, and reviews
-    await tx.password.create({
-      data: {
-        userId: user.id,
-        password: hashedPassword,
-      },
-    });
+    await Promise.all([
+      tx.password.create({
+        data: {
+          userId: user.id,
+          password: hashedPassword,
+        },
+      }),
 
-    await tx.reviewerTypeCategory.createMany({
-      data: reviewerTypesCategories,
-      skipDuplicates: true,
-    });
+      tx.userRole.create({
+        data: {
+          name: Roles.Admin,
+          userId: user.id,
+        },
+      }),
 
-    await tx.review.createMany({
-      data: reviewRaws,
-      skipDuplicates: true,
-    });
+      tx.reviewerTypeCategory.createMany({
+        data: reviewerTypesCategories,
+        skipDuplicates: true,
+      }),
+
+      tx.review.createMany({
+        data: reviewRaws,
+        skipDuplicates: true,
+      }),
+    ]);
 
     // Now find the newly created reviews so we can link details
     const insertedReviews = await tx.review.findMany({

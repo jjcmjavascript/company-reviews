@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
@@ -18,6 +19,7 @@ import { ReportedCompanyCreateService } from './service/reported-company-create.
 import { ReportedCompanySearchService } from './service/reported-company-search.service';
 import { ReportedCompanyFindService } from './service/reported-company-find.service';
 import { ReportedCompanyPaginatedQueryParams } from '@shared/services/queries/reported-company-index.query';
+import { Loged } from '@shared/decorators/loged.decorator';
 
 @Controller('companies')
 export class ReportedCompanyController {
@@ -33,9 +35,10 @@ export class ReportedCompanyController {
     return await this.reportedCompanySearchService.execute(params);
   }
 
-  @HasRoles(Roles.Admin)
   @Post()
-  async create(params: ReportedCompanyCreateDto) {
+  @Loged()
+  @HasRoles(Roles.Admin)
+  async create(@Body() params: ReportedCompanyCreateDto) {
     return await this.reportedCompanyCreateService.execute(params);
   }
 
