@@ -15,10 +15,9 @@ export class ReportedCompanySearchService {
     name: string;
   }): Promise<{ id: number; name: string }[]> {
     try {
-      console.log(params);
       const searchResult = await this.repository.execute({
         name: {
-          startsWith: params.name,
+          contains: params.name,
           mode: 'insensitive',
         },
       });
