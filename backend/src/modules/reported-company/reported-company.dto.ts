@@ -1,13 +1,49 @@
-import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
 
-export class ReportedCompanyIndexServiceDto {
+export class ReportedCompanyPaginatedQueryServiceDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  @MinLength(2)
+  name: string;
+}
+
+export class ReportedCompanyListServiceDto {
   @IsOptional()
   @Transform(({ value }) => {
-    return Number.isNaN(Number(value)) ? 0 : Math.abs(Number(value));
+    return Number.isNaN(Number(value)) ? false : Math.abs(Number(value));
   })
-  from?: number;
+  @IsNumber()
+  @Min(1)
+  page?: number;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['ASC', 'DESC'])
+  order?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['score', 'name', 'id'])
+  orderBy?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    return Number.isNaN(Number(value)) ? false : Math.abs(Number(value));
+  })
+  @IsNumber()
+  @IsPositive()
+  limit?: number;
 }
 
 export class ReportedCompanyCreateDto {
@@ -16,19 +52,19 @@ export class ReportedCompanyCreateDto {
   @MinLength(3)
   name: string;
 
-  @Optional()
+  @IsOptional()
   @IsString()
   @MaxLength(150)
   @MinLength(3)
-  tax: string;
+  tax?: string;
 
-  @Optional()
+  @IsOptional()
   @IsString()
   @MaxLength(250)
   @MinLength(10)
   description: string;
 
-  @Optional()
+  @IsOptional()
   @IsString()
   @MaxLength(250)
   @MinLength(6)

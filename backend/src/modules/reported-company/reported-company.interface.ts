@@ -1,26 +1,11 @@
-export interface ReportedCompanyWhereIn {
-  id?: {
-    in?: number[];
-  };
-}
+import {
+  NumberIn,
+  StartsWith,
+  StringContains,
+  StringIn,
+} from '@shared/interfaces/prisma-query.interfaces';
 
 export interface ReportedCompanyWhere {
-  id?: number;
-}
-
-export type ReportedCompanyCriteria =
-  | ReportedCompanyWhereIn
-  | ReportedCompanyWhere;
-
-export interface ReportedCompanyIndexResponse {
-  [companyId: number]: {
-    name: string;
-    id: number;
-    evaluation: CompanyEvaluation[];
-  };
-}
-
-interface CompanyEvaluation {
-  type: string;
-  score: number;
+  id?: number | NumberIn;
+  name?: string | StringIn | StartsWith | StringContains;
 }

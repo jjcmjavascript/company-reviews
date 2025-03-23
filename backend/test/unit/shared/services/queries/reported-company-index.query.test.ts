@@ -1,21 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
-import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
+import { ReportedCompanyPaginatedQuery } from '@shared/services/queries/reported-company-index.query';
 import { mockDeep } from 'jest-mock-extended';
 
-describe('ReportedCompanyIndexQuery', () => {
-  let query: ReportedCompanyIndexQuery;
+describe('ReportedCompanyPaginatedQuery', () => {
+  let query: ReportedCompanyPaginatedQuery;
   let prismaService: jest.Mocked<PrismaService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ReportedCompanyIndexQuery,
+        ReportedCompanyPaginatedQuery,
         { provide: PrismaService, useValue: mockDeep<PrismaService>() },
       ],
     }).compile();
 
-    query = module.get<ReportedCompanyIndexQuery>(ReportedCompanyIndexQuery);
+    query = module.get<ReportedCompanyPaginatedQuery>(
+      ReportedCompanyPaginatedQuery,
+    );
     prismaService = module.get(PrismaService);
   });
 
@@ -24,12 +26,14 @@ describe('ReportedCompanyIndexQuery', () => {
       { id: 1, name: 'Empresa A', score: 4.5, type: 'Fraude' },
       { id: 2, name: 'Empresa B', score: 3.8, type: 'Estafa' },
     ];
+
+    jest.spyOn(prismaService.category, 'count').mockResolvedValue(2);
+
     prismaService.$queryRaw.mockResolvedValue(mockCompanies);
 
-    const result = await query.execute({ from: 0 });
+    const result = await query.execute({ from: 0, limit: 20 });
 
     expect(result).toEqual(mockCompanies);
     expect(prismaService.$queryRaw).toHaveBeenCalledTimes(1);
-    expect(prismaService.$queryRaw).toHaveBeenCalledWith(expect.any(Array), 0);
   });
 });

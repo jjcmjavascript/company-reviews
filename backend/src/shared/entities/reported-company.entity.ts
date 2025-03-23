@@ -36,6 +36,12 @@ export class ReportedCompany {
   }
 
   get values() {
-    return this.attributes;
+    return {
+      name: this.attributes.name,
+      tax: this.attributes.tax,
+      description: this.attributes.description,
+      imageUrl: this.attributes.imageUrl,
+      createdAt: this.attributes.createdAt,
+    };
   }
 }

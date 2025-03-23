@@ -1,28 +1,31 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ReportedCompanySearchRepository } from '../repositories/reported-company-search.repository';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { ReportedCompanyFindAllRepository } from '../repositories/reported-company-find-all.repository';
 
 @Injectable()
 export class ReportedCompanySearchService {
-  constructor(
-    private readonly reportedCompanySearchRepository: ReportedCompanySearchRepository,
-  ) {}
+  private readonly logger = new Logger(ReportedCompanySearchService.name);
+
+  constructor(private readonly repository: ReportedCompanyFindAllRepository) {}
 
   async execute(params: {
     name: string;
   }): Promise<{ id: number; name: string }[]> {
     try {
-      const searchResult =
-        await this.reportedCompanySearchRepository.execute(params);
-
-      const result = searchResult.map((company) => {
-        return {
-          id: company.id,
-          name: company.name,
-        };
+      const searchResult = await this.repository.execute({
+        name: {
+          contains: params.name,
+          mode: 'insensitive',
+        },
       });
 
-      return result;
+      return searchResult;
     } catch (error) {
+      this.logger.error(`[ReportedCompanySearchService] ${error.message}`);
+
       throw new InternalServerErrorException(
         'An error occurred while trying to search for the reported company.',
       );

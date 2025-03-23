@@ -7,9 +7,5 @@ export class HomeController {
   constructor(private readonly homeIndexService: HomeIndexService) {}
 
   @Get()
-  async index(): Promise<HomeIndexResponse[]> {
-    const result = await this.homeIndexService.execute();
-
-    return result;
-  }
+  async index() {}
 }

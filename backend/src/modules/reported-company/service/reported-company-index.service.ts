@@ -1,36 +1,31 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { ReportedCompanyIndexQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
-import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
-import { isPositiveNumber } from '@shared/helpers/number.helper';
-import { ReportedCompanyIndexResponse } from '../reported-company.interface';
+import {
+  ReportedCompanyPaginatedQuery,
+  ReportedCompanyPaginatedQueryParams,
+  ReportedCompanyPaginatedQueryResult,
+} from '@shared/services/queries/reported-company-index.query';
 
 @Injectable()
-export class ReportedCompanyIndexService {
-  private logger = new Logger(ReportedCompanyIndexService.name);
+export class ReportedCompanyPaginatedQueryService {
+  private logger = new Logger(ReportedCompanyPaginatedQueryService.name);
 
-  constructor(private readonly rcQuery: ReportedCompanyIndexQuery) {}
+  constructor(private readonly rcQuery: ReportedCompanyPaginatedQuery) {}
 
-  async execute(params: {
-    id: unknown;
-  }): Promise<ReportedCompanyIndexResponse> {
-    const idToNumber = Number(params.id);
-
-    if (!isPositiveNumber(idToNumber)) {
-      this.logger.error('Invalid id', idToNumber);
-      throw new BadRequestException('Invalid id');
-    }
-
+  async execute(
+    params: Partial<ReportedCompanyPaginatedQueryParams>,
+  ): Promise<ReportedCompanyPaginatedQueryResult> {
     try {
-      const queryResult = await this.rcQuery.execute({ from: idToNumber });
+      const queryResult = await this.rcQuery.execute({
+        ...params,
+        page: params.page || 1,
+        limit: params.limit || 20,
+      });
 
-      const transformResult = this.transform(queryResult);
-
-      return transformResult;
+      return queryResult;
     } catch (e: unknown) {
       this.logger.error(
         `An error happened when list was loading ${(e as Error).message}`,
@@ -40,23 +35,5 @@ export class ReportedCompanyIndexService {
         'An error happened when list was loading',
       );
     }
-  }
-
-  private transform(result: ReportedCompanyIndexQueryResultItem[]) {
-    return result.reduce((acc, next) => {
-      if (!acc[next.id]) {
-        acc[next.id] = {
-          name: next.name,
-          id: next.id,
-          evaluation: [{ type: next.type, score: next.score }],
-        };
-
-        return acc;
-      }
-
-      acc[next.id].evaluation.push({ type: next.type, score: next.score });
-
-      return acc;
-    }, {});
   }
 }
