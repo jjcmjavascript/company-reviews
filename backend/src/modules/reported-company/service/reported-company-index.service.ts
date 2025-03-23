@@ -4,21 +4,24 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { ReportedCompanyIndexQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
-import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
+import { ReportedCompanyPaginatedQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
+import { ReportedCompanyPaginatedQuery } from '@shared/services/queries/reported-company-index.query';
 import { isPositiveNumber } from '@shared/helpers/number.helper';
-import { ReportedCompanyIndexResponse } from '../reported-company.interface';
+import {
+  ReportedCompanyPaginate,
+  ReportedCompanyPaginatedResponse,
+} from '../reported-company.interface';
 import { isEmpty } from 'class-validator';
 
 @Injectable()
-export class ReportedCompanyIndexService {
-  private logger = new Logger(ReportedCompanyIndexService.name);
+export class ReportedCompanyPaginatedQueryService {
+  private logger = new Logger(ReportedCompanyPaginatedQueryService.name);
 
-  constructor(private readonly rcQuery: ReportedCompanyIndexQuery) {}
+  constructor(private readonly rcQuery: ReportedCompanyPaginatedQuery) {}
 
   async execute(params: {
     id: unknown;
-  }): Promise<ReportedCompanyIndexResponse> {
+  }): Promise<ReportedCompanyPaginatedResponse> {
     const idToNumber = Number(params.id);
 
     if (!isEmpty(params.id) && !isPositiveNumber(idToNumber)) {
@@ -29,9 +32,12 @@ export class ReportedCompanyIndexService {
     try {
       const queryResult = await this.rcQuery.execute({ from: idToNumber });
 
-      const transformResult = this.transform(queryResult);
-
-      return transformResult;
+      return {
+        currentId: queryResult.currentId,
+        nextId: queryResult.nextId,
+        pages: queryResult.pages,
+        data: this.transform(queryResult.data),
+      };
     } catch (e: unknown) {
       this.logger.error(
         `An error happened when list was loading ${(e as Error).message}`,
@@ -43,8 +49,8 @@ export class ReportedCompanyIndexService {
     }
   }
 
-  private transform(result: ReportedCompanyIndexQueryResultItem[]) {
-    return result.reduce((acc, next) => {
+  private transform(result: ReportedCompanyPaginatedQueryResultItem[]) {
+    const grouped = result.reduce((acc, next) => {
       if (!acc[next.id]) {
         acc[next.id] = {
           name: next.name,
@@ -59,5 +65,7 @@ export class ReportedCompanyIndexService {
 
       return acc;
     }, {});
+
+    return Object.values(grouped) as ReportedCompanyPaginate[];
   }
 }

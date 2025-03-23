@@ -1,7 +1,7 @@
-import { ReportedCompanyIndexQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
+import { ReportedCompanyPaginatedQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
 
-export const getReportedCompanyIndexQueryResultMocks =
-  (): ReportedCompanyIndexQueryResultItem[] => [
+export const getReportedCompanyPaginatedQueryResultMocks =
+  (): ReportedCompanyPaginatedQueryResultItem[] => [
     {
       id: 1,
       name: 'FullStack Labs',

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ReportedCompanyIndexQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
+import { ReportedCompanyPaginatedQueryResultItem } from '@shared/interfaces/reported-companies-index.interface';
 import { PrismaService } from '../database/prisma/prisma.service';
 
 @Injectable()
-export class ReportedCompanyIndexQuery {
+export class ReportedCompanyPaginatedQuery {
   constructor(private readonly prismaService: PrismaService) {}
 
   async execute({
@@ -12,11 +12,17 @@ export class ReportedCompanyIndexQuery {
   }: {
     from: number;
     limit?: number;
-  }): Promise<ReportedCompanyIndexQueryResultItem[]> {
+  }): Promise<{
+    currentId: number;
+    pages: number;
+    data: ReportedCompanyPaginatedQueryResultItem[];
+    nextId: number;
+  }> {
     const categoriesCount = await this.prismaService.category.count();
+    const companies = await this.prismaService.reportedCompany.count();
 
     const paginatedCompanies = await this.prismaService.$queryRaw<
-      ReportedCompanyIndexQueryResultItem[]
+      ReportedCompanyPaginatedQueryResultItem[]
     >`
         SELECT "ReportedCompany".id as id, "ReportedCompany".name as name, ROUND(AVG(COALESCE("ReviewDetail".score, 0)), 2) as score , "Category".name as "type"
         from "ReportedCompany"
@@ -29,6 +35,11 @@ export class ReportedCompanyIndexQuery {
         LIMIT ${limit * categoriesCount}
     `;
 
-    return paginatedCompanies;
+    return {
+      currentId: from,
+      nextId: paginatedCompanies[paginatedCompanies.length - 1]?.id,
+      pages: Math.ceil(companies / limit),
+      data: paginatedCompanies,
+    };
   }
 }

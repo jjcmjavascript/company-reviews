@@ -2,7 +2,15 @@ import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
 import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class ReportedCompanyIndexServiceDto {
+export class ReportedCompanyPaginatedQueryServiceDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  @MinLength(2)
+  name: string;
+}
+
+export class ReportedCompanyListServiceDto {
   @IsOptional()
   @Transform(({ value }) => {
     return Number.isNaN(Number(value)) ? 0 : Math.abs(Number(value));

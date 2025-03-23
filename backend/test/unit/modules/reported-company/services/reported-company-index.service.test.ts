@@ -1,28 +1,28 @@
-import { ReportedCompanyIndexService } from '@modules/reported-company/service/reported-company-index.service';
+import { ReportedCompanyPaginatedQueryService } from '@modules/reported-company/service/reported-company-index.service';
 import { Test } from '@nestjs/testing';
-import { ReportedCompanyIndexQuery } from '@shared/services/queries/reported-company-index.query';
+import { ReportedCompanyPaginatedQuery } from '@shared/services/queries/reported-company-index.query';
 import { getPrismaMock } from '../../../mocks/prisma.service.mock';
-import { getReportedCompanyIndexQueryResultMocks } from '../../../mocks/entities/reported-company.mock';
+import { getReportedCompanyPaginatedQueryResultMocks } from '../../../mocks/entities/reported-company.mock';
 
-describe('[Service] ReportedCompanyIndexService', () => {
-  let reportedCompanyIndexQuery: ReportedCompanyIndexQuery;
-  let reportedCompanyIndexService: ReportedCompanyIndexService;
+describe('[Service] ReportedCompanyPaginatedQueryService', () => {
+  let reportedCompanyIndexQuery: ReportedCompanyPaginatedQuery;
+  let reportedCompanyIndexService: ReportedCompanyPaginatedQueryService;
 
   beforeAll(async () => {
     const ref = await Test.createTestingModule({
       providers: [
         getPrismaMock(),
-        ReportedCompanyIndexQuery,
-        ReportedCompanyIndexService,
+        ReportedCompanyPaginatedQuery,
+        ReportedCompanyPaginatedQueryService,
       ],
     }).compile();
 
-    reportedCompanyIndexQuery = ref.get(ReportedCompanyIndexQuery);
-    reportedCompanyIndexService = ref.get(ReportedCompanyIndexService);
+    reportedCompanyIndexQuery = ref.get(ReportedCompanyPaginatedQuery);
+    reportedCompanyIndexService = ref.get(ReportedCompanyPaginatedQueryService);
   });
 
   it('It should return an grouped array when has data', async () => {
-    const queryMocks = getReportedCompanyIndexQueryResultMocks();
+    const queryMocks = getReportedCompanyPaginatedQueryResultMocks();
     const spyIndexQueryService = jest.spyOn(
       reportedCompanyIndexQuery,
       'execute',
