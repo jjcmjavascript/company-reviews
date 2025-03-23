@@ -17,6 +17,7 @@ import { Roles } from '@shared/services/permission/types/roles.enum';
 import { ReportedCompanyCreateService } from './service/reported-company-create.service';
 import { ReportedCompanySearchService } from './service/reported-company-search.service';
 import { ReportedCompanyFindService } from './service/reported-company-find.service';
+import { ReportedCompanyPaginatedQueryParams } from '@shared/services/queries/reported-company-index.query';
 
 @Controller('companies')
 export class ReportedCompanyController {
@@ -40,9 +41,9 @@ export class ReportedCompanyController {
 
   @Get('paginated')
   async list(@Query() params: ReportedCompanyListServiceDto) {
-    return await this.reportedCompanyIndexService.execute({
-      id: params.from || 0,
-    });
+    return await this.reportedCompanyIndexService.execute(
+      params as ReportedCompanyPaginatedQueryParams,
+    );
   }
 
   @Get(':id')

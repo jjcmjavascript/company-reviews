@@ -1,6 +1,15 @@
 import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
 
 export class ReportedCompanyPaginatedQueryServiceDto {
   @IsOptional()
@@ -13,9 +22,29 @@ export class ReportedCompanyPaginatedQueryServiceDto {
 export class ReportedCompanyListServiceDto {
   @IsOptional()
   @Transform(({ value }) => {
-    return Number.isNaN(Number(value)) ? 0 : Math.abs(Number(value));
+    return Number.isNaN(Number(value)) ? false : Math.abs(Number(value));
   })
-  from?: number;
+  @IsNumber()
+  @Min(1)
+  page?: number;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['ASC', 'DESC'])
+  order?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['score', 'name', 'id'])
+  orderBy?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    return Number.isNaN(Number(value)) ? false : Math.abs(Number(value));
+  })
+  @IsNumber()
+  @IsPositive()
+  limit?: number;
 }
 
 export class ReportedCompanyCreateDto {
