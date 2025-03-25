@@ -1,0 +1,13 @@
+{
+  "name": "simple-market",
+  "version": "1.0.0",
+  "description": "simple market backend create by jjcmjavascript",
+  "author": "MIT",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "start": "cd backend && npm run start",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev"
+  }
+}

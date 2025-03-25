@@ -2,11 +2,11 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UserCreateRepository } from './repositories/user-create.repository';
 import { UserFindAllRepository } from './repositories/user-find-all.repository';
 import { UserCreateDto } from './user.dto';
-import { Public } from '@decorators/public.decorator';
 import { UserFindOneRepository } from './repositories/user-find-one.repository';
 import { arrayEntityToHash } from '@shared/helpers/array-entity-to-hash.helper';
 import { HasRoles } from '@shared/decorators/user-roles.decorator';
 import { Roles } from '@shared/services/permission/types/roles.enum';
+import { Loged } from '@shared/decorators/loged.decorator';
 
 @Controller('users')
 export class UserController {
@@ -17,6 +17,7 @@ export class UserController {
   ) {}
 
   @Get()
+  @Loged()
   @HasRoles(Roles.Admin)
   async findAll() {
     const users = await this.findAllService.execute();
@@ -28,8 +29,9 @@ export class UserController {
     };
   }
 
-  @Public()
   @Post()
+  @Loged()
+  @HasRoles(Roles.Admin)
   async create(@Body() userDto: UserCreateDto) {
     const result = await this.createService.executeTransaction(
       userDto,
@@ -39,6 +41,7 @@ export class UserController {
     return result.toPrimitive();
   }
 
+  @Loged()
   @HasRoles(Roles.Admin)
   async createAdmin(@Body() userDto: UserCreateDto) {
     const result = await this.createService.executeTransaction(
@@ -50,6 +53,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @Loged()
   async findOne(@Param('id') id: number) {
     const user = await this.findOneService.execute({ id });
 
