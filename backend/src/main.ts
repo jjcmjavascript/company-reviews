@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from '@config/config';
 import helmet from 'helmet';
+import { LoggingInterceptor } from '@shared/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.enableCors({
     origin: config.cors.origins,
