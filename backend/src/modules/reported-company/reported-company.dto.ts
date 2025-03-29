@@ -44,6 +44,12 @@ export class ReportedCompanyListServiceDto {
   @IsNumber()
   @IsPositive()
   limit?: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  @MinLength(2)
+  name: string;
 }
 
 export class ReportedCompanyCreateDto {

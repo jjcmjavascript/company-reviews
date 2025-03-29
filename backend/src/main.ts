@@ -16,6 +16,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.enableCors({

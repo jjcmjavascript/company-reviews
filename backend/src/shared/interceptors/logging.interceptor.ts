@@ -31,22 +31,20 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const now = Date.now();
 
-    this.logger.log(
-      `[ReportedCompany-LoggingInterceptor] 🚀 ${request.method} ${request.url}`,
-    );
+    this.logger.log(` 🚀 ${request.method} ${request.url}`);
 
     return next.handle().pipe(
       tap((responseData) => {
         const time = Date.now() - now;
         this.logger.log(
-          `[ReportedCompany-LoggingInterceptor] 📤 Response: ${getJsonString(responseData)?.slice(0, 300)} | ⏱️ ${time}ms`,
+          ` 📤 Response: ${getJsonString(responseData)?.slice(0, 300)} | ⏱️ ${time}ms`,
         );
       }),
       catchError((error) => {
         const time = Date.now() - now;
 
         this.logger.error(
-          `[ReportedCompany-LoggingInterceptor] ❌ ${request.method} ${request.url} | ❗ Error: ${error.message} | ⏱️ ${time}ms`,
+          ` ❌ ${request.method} ${request.url} | ❗ Error: ${error.message} | ⏱️ ${time}ms`,
         );
         return throwError(() => error);
       }),

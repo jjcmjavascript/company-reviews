@@ -10,8 +10,14 @@ export class ReportedCompanyPaginatedQuery {
     limit = 20,
     orderBy = 'id',
     order = 'ASC',
+    name,
   }: ReportedCompanyPaginatedQueryParams): Promise<ReportedCompanyPaginatedQueryResult> {
-    const totalCompanies = await this.prismaService.reportedCompany.count();
+    const totalCompanies = await this.prismaService.reportedCompany.count({
+      where: {
+        deletedAt: null,
+        name: name ? { contains: name, mode: 'insensitive' } : undefined,
+      },
+    });
 
     const offset = (page - 1) * limit;
 
@@ -29,7 +35,7 @@ export class ReportedCompanyPaginatedQuery {
           ON "ReportedCompany".id = "Review"."reportedCompanyId"
         JOIN "ReviewDetail"
           ON "ReviewDetail"."reviewId" = "Review".id
-      WHERE "ReportedCompany"."deletedAt" IS NULL
+      WHERE "ReportedCompany"."deletedAt" IS NULL ${name ? `AND "ReportedCompany".name ILIKE '%${name}%'` : ''}
       GROUP BY "ReportedCompany".id
       ORDER BY ${orderByExpression}
       LIMIT ${limit} OFFSET ${offset}
@@ -75,4 +81,5 @@ export interface ReportedCompanyPaginatedQueryParams {
   limit?: number; // Cuántos registros por página
   orderBy?: 'id' | 'name' | 'score';
   order?: 'ASC' | 'DESC';
+  name?: string; // Nombre de la empresa a buscar
 }

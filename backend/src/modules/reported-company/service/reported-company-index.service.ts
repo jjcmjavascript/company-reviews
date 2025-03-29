@@ -28,7 +28,7 @@ export class ReportedCompanyPaginatedQueryService {
       return queryResult;
     } catch (e: unknown) {
       this.logger.error(
-        `An error happened when list was loading ${(e as Error).message}`,
+        `An error happened when list was loading: ${(e as Error).message}`,
       );
 
       throw new InternalServerErrorException(
