@@ -9,17 +9,19 @@ datasource db {
 }
 
 model User {
-  id        Int                      @id @default(autoincrement())
-  uuid      String?                  @unique @db.VarChar()
-  email     String                   @unique @db.VarChar()
-  name      String?                  @db.VarChar()
-  lastname  String?                  @db.VarChar()
-  tax       String?                  @db.VarChar()
-  deletedAt DateTime?                @db.Timestamp()
-  password  Password?
-  roles     UserRole[]
-  comments  ReportedCompanyComment[]
-  reviews   Review[]
+  id            Int                      @id @default(autoincrement())
+  uuid          String?                  @unique @db.VarChar()
+  email         String                   @unique @db.VarChar()
+  name          String?                  @db.VarChar()
+  lastname      String?                  @db.VarChar()
+  tax           String?                  @db.VarChar()
+  deletedAt     DateTime?                @db.Timestamp()
+  password      Password?
+  roles         UserRole[]
+  comments      ReportedCompanyComment[]
+  reviews       Review[]
+  ReviewLike    ReviewLike[]
+  ReviewDislike ReviewDislike[]
 }
 
 model Password {
@@ -76,6 +78,8 @@ model Review {
   reviewerType       ReviewerType    @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   reportedCompany    ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
+  ReviewLike         ReviewLike[]
+  ReviewDislike      ReviewDislike[]
 }
 
 model ReviewerType {
@@ -114,4 +118,24 @@ model Category {
   createdAt            DateTime               @default(now()) @db.Timestamp()
   reviewerTypeCategory ReviewerTypeCategory[]
   ReviewDetail         ReviewDetail[]
+}
+
+model ReviewLike {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  reviewId  Int
+  createdAt DateTime  @default(now()) @db.Timestamp()
+  deletedAt DateTime? @db.Timestamp()
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review    Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+}
+
+model ReviewDislike {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  reviewId  Int
+  createdAt DateTime  @default(now()) @db.Timestamp()
+  deletedAt DateTime? @db.Timestamp()
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review    Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
