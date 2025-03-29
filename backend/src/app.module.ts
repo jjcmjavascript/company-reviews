@@ -13,6 +13,7 @@ import { ReportedCompanyModule } from '@modules/reported-company/reported-compan
 import { ThrottlerModule } from '@nestjs/throttler';
 import { UserRolesGuard } from './modules/user-roles/user-roles.guard';
 import { UserRolesModule } from '@modules/user-roles/user-roles.module';
+import { LikeDislikeModule } from '@modules/like-dislike/like-dislike.module';
 
 const providers = [];
 
@@ -48,6 +49,7 @@ providers.push({
     ReportedCompanyModule,
     HomeModule,
     UserRolesModule,
+    LikeDislikeModule,
   ],
   controllers: [],
   providers,
