@@ -1,3 +1,5 @@
+import { Roles } from '@shared/services/permission/types/roles.enum';
+
 export interface UserRolesPrimitive {
   id: number;
   userId: number;
@@ -19,18 +21,18 @@ export class UserRoles {
     });
   }
 
-  toPrimitive(): UserRolesPrimitive {
+  toPrimitive(): Omit<UserRolesPrimitive, 'name'> & { name: Roles } {
     return {
       id: this.attributes.id,
       userId: this.attributes.userId,
-      name: this.attributes.name,
+      name: this.attributes.name as Roles,
     };
   }
-  get values() {
+  get values(): Omit<UserRolesPrimitive, 'name'> & { name: Roles } {
     return {
       id: this.attributes.id,
       userId: this.attributes.userId,
-      name: this.attributes.name,
+      name: this.attributes.name as Roles,
     };
   }
 }

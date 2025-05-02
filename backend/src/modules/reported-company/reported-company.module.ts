@@ -18,7 +18,6 @@ import { ReportedCompanyFindOneByRepository } from './repositories/reported-comp
     ReportedCompanyFindAllRepository,
     ReportedCompanyCreateRepository,
     ReportedCompanyFindOneByRepository,
-
     ReportedCompanyPaginatedQueryService,
     ReportedCompanyFindService,
     ReportedCompanyCreateService,

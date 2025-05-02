@@ -20,7 +20,6 @@ export class ReportedCompanyCreateService {
     params: Omit<Partial<ReportedCompanyPrimitive>, 'imageUrl' | 'createdAt'>,
   ): Promise<ReportedCompany> {
     try {
-      console.log(params);
       const result = await this.reportedCompanyCreateService.execute(params);
 
       return ReportedCompany.create(result);

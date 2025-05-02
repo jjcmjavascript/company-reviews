@@ -9,19 +9,19 @@ datasource db {
 }
 
 model User {
-  id            Int                      @id @default(autoincrement())
-  uuid          String?                  @unique @db.VarChar()
-  email         String                   @unique @db.VarChar()
-  name          String?                  @db.VarChar()
-  lastname      String?                  @db.VarChar()
-  tax           String?                  @db.VarChar()
-  deletedAt     DateTime?                @db.Timestamp()
-  password      Password?
-  roles         UserRole[]
-  comments      ReportedCompanyComment[]
-  reviews       Review[]
-  ReviewLike    ReviewLike[]
-  ReviewDislike ReviewDislike[]
+  id              Int                      @id @default(autoincrement())
+  uuid            String?                  @unique @db.VarChar()
+  email           String                   @unique @db.VarChar()
+  name            String?                  @db.VarChar()
+  lastname        String?                  @db.VarChar()
+  tax             String?                  @db.VarChar()
+  deletedAt       DateTime?                @db.Timestamp()
+  createdAt       DateTime                 @default(now()) @db.Timestamp()
+  password        Password?
+  roles           UserRole[]
+  comments        ReportedCompanyComment[]
+  reviews         Review[]
+  reviewReactions ReviewReaction[]
 }
 
 model Password {
@@ -66,20 +66,19 @@ model ReportedCompanyComment {
 }
 
 model Review {
-  id                 Int             @id @default(autoincrement())
+  id                 Int              @id @default(autoincrement())
   userId             Int
   reportedCompanyId  Int
   reviewerTypeId     Int
   review             String?
   verificationStatus String?
-  createdAt          DateTime        @default(now()) @db.Timestamp()
-  deletedAt          DateTime?       @db.Timestamp()
+  createdAt          DateTime         @default(now()) @db.Timestamp()
+  deletedAt          DateTime?        @db.Timestamp()
   reviewDetails      ReviewDetail[]
-  reviewerType       ReviewerType    @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
-  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reportedCompany    ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
-  ReviewLike         ReviewLike[]
-  ReviewDislike      ReviewDislike[]
+  reviewerType       ReviewerType     @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reportedCompany    ReportedCompany  @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
+  ReviewReaction     ReviewReaction[]
 }
 
 model ReviewerType {
@@ -120,22 +119,21 @@ model Category {
   ReviewDetail         ReviewDetail[]
 }
 
-model ReviewLike {
-  id        Int       @id @default(autoincrement())
+model ReviewReaction {
+  id        Int          @id @default(autoincrement())
   userId    Int
   reviewId  Int
-  createdAt DateTime  @default(now()) @db.Timestamp()
-  deletedAt DateTime? @db.Timestamp()
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  review    Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now()) @db.Timestamp()
+  deletedAt DateTime?    @db.Timestamp()
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review    Review       @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  type      ReactionType @default(LIKE)
+
+  @@unique([userId, reviewId])
+  @@index([reviewId, type])
 }
 
-model ReviewDislike {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  reviewId  Int
-  createdAt DateTime  @default(now()) @db.Timestamp()
-  deletedAt DateTime? @db.Timestamp()
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  review    Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+enum ReactionType {
+  LIKE
+  DISLIKE
 }

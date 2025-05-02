@@ -32,10 +32,7 @@ export class UserRolesGuard implements CanActivate {
 
       const userRoles = await this.useRoleFindOneRepository.execute(user.id);
 
-      if (
-        !userRoles ||
-        !roles.includes(userRoles.toPrimitive().name as Roles)
-      ) {
+      if (!userRoles || !roles.includes(userRoles.toPrimitive().name)) {
         return false;
       }
       return true;
