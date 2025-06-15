@@ -37,6 +37,7 @@ export class ReportedCompany {
 
   get values() {
     return {
+      id: this.attributes.id,
       name: this.attributes.name,
       tax: this.attributes.tax,
       description: this.attributes.description,

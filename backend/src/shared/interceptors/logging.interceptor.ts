@@ -7,22 +7,6 @@ import {
 } from '@nestjs/common';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
-const getJsonString = (data: unknown): string => {
-  try {
-    if (typeof data === 'string') {
-      return data;
-    }
-
-    if (typeof data === 'object') {
-      return JSON.stringify(data) || '----';
-    }
-
-    return String(data);
-  } catch (error) {
-    return 'Error converting to JSON';
-  }
-};
-
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger(LoggingInterceptor.name);
@@ -36,16 +20,18 @@ export class LoggingInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap((responseData) => {
         const time = Date.now() - now;
-        this.logger.log(
-          ` 📤 Response: ${getJsonString(responseData)?.slice(0, 300)} | ⏱️ ${time}ms`,
-        );
+        this.logger.log({
+          message: ` ✅ ${request.method} ${request.url} | ⏱️ ${time}ms`,
+          data: responseData,
+        });
       }),
       catchError((error) => {
         const time = Date.now() - now;
 
-        this.logger.error(
-          ` ❌ ${request.method} ${request.url} | ❗ Error: ${error.message} | ⏱️ ${time}ms`,
-        );
+        this.logger.error({
+          error: ` ❌ ${request.method} ${request.url} | ❗ Error: ${error.message} | ⏱️ ${time}ms`,
+          stack: error.stack,
+        });
         return throwError(() => error);
       }),
     );

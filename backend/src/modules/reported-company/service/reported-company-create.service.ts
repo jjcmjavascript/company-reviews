@@ -18,15 +18,16 @@ export class ReportedCompanyCreateService {
 
   async execute(
     params: Omit<Partial<ReportedCompanyPrimitive>, 'imageUrl' | 'createdAt'>,
-  ): Promise<ReportedCompany> {
+  ): Promise<ReportedCompanyPrimitive> {
     try {
       const result = await this.reportedCompanyCreateService.execute(params);
 
-      return ReportedCompany.create(result);
+      return ReportedCompany.create(result).values;
     } catch (error: unknown) {
-      this.logger.error(
-        `[ReportedCompanyCreateService] ${(error as Error).message}`,
-      );
+      this.logger.error({
+        message: 'Error on create reported company',
+        error: (error as Error).message,
+      });
 
       throw new InternalServerErrorException(
         'Error on create reported company',

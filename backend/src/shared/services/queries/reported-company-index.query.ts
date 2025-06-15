@@ -29,7 +29,9 @@ export class ReportedCompanyPaginatedQuery {
       SELECT
         "ReportedCompany".id AS id,
         "ReportedCompany".name AS name,
-        ROUND(AVG(COALESCE("ReviewDetail".score, 0)), 2) AS score
+        "ReportedCompany"."imageUrl" AS "imageUrl",
+        "ReportedCompany".tax AS tax,
+        CAST(ROUND(AVG(COALESCE("ReviewDetail".score, 0)), 2) AS FLOAT) AS score
       FROM "ReportedCompany"
         JOIN "Review"
           ON "ReportedCompany".id = "Review"."reportedCompanyId"

@@ -4,11 +4,9 @@ import { APP_FILTER } from '@nestjs/core';
 import { SentryGlobalFilter } from '@sentry/nestjs/setup';
 
 import { config } from '@config/config';
-// import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
-import { HomeModule } from '@modules/home/home.module';
 import { ReportedCompanyModule } from '@modules/reported-company/reported-company.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { UserRolesGuard } from './modules/user-roles/user-roles.guard';
@@ -43,11 +41,9 @@ providers.push({
       },
     ]),
     SentryModule.forRoot(),
-    // ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
     ReportedCompanyModule,
-    HomeModule,
     UserRolesModule,
     ReviewReactionModule,
   ],

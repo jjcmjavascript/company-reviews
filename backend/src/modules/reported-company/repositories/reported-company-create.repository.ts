@@ -9,8 +9,8 @@ export class ReportedCompanyCreateRepository {
   async execute(
     createParams: Partial<ReportedCompanyPrimitive>,
   ): Promise<ReportedCompanyPrimitive> {
-    return await this.prismaService.$transaction(async (ctx) => {
-      return await ctx.reportedCompany.create({
+    return this.prismaService.$transaction(async (ctx) => {
+      return ctx.reportedCompany.create({
         data: {
           name: createParams.name,
           description: createParams.description,
