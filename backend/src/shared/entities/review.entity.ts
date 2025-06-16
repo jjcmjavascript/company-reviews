@@ -1,10 +1,12 @@
+import { ReviewVerificationStatus } from '@shared/enums/commons.enum';
+
 export interface ReviewPrimitive {
   id: number;
   userId: number;
   reportedCompanyId: number;
   reviewerTypeId: number;
   review: string;
-  verificationStatus: string;
+  verificationStatus: ReviewVerificationStatus;
   createdAt: Date;
   deletedAt?: Date;
 }
@@ -35,6 +37,22 @@ export class Review {
 
   static fromArray(reviews: Array<ReviewPrimitive>): Array<Review> {
     return reviews.map((review) => new Review(review));
+  }
+
+  static fromArrayToReviewJsonResponse(
+    reviews: Array<ReviewPrimitive>,
+  ): Array<Partial<ReviewPrimitive>> {
+    return reviews.map((review) => {
+      return {
+        id: review.id,
+        userId: review.userId,
+        reportedCompanyId: review.reportedCompanyId,
+        reviewerTypeId: review.reviewerTypeId,
+        review: review.review,
+        verificationStatus: review.verificationStatus,
+        createdAt: review.createdAt,
+      };
+    });
   }
 
   get values() {

@@ -1,9 +1,10 @@
-const { Roles } = require('../../permission/types/roles.enum');
+import { PrismaClient } from '@prisma/client';
+import * as argon2 from 'argon2';
+import * as fs from 'node:fs';
+import { loadEnvFile } from 'node:process';
 
-const { PrismaClient } = require('@prisma/client');
-const argon2 = require('argon2');
-const fs = require('node:fs');
-const { loadEnvFile } = require('node:process');
+import { Roles } from '../../permission/types/roles.enum';
+import { ReviewVerificationStatus } from '../../../enums/commons.enum';
 
 loadEnvFile('.env');
 
@@ -67,7 +68,7 @@ const getReview = (reportedCompanies: { id: number; name: string }[]) => {
     userId: 1,
     reviewerTypeId: 1,
     reportedCompanyId: company.id,
-    verificationStatus: 'not_verified',
+    verificationStatus: ReviewVerificationStatus.NOT_VERIFIED,
   }));
 };
 

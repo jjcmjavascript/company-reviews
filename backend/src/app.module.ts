@@ -12,6 +12,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { UserRolesGuard } from './modules/user-roles/user-roles.guard';
 import { UserRolesModule } from '@modules/user-roles/user-roles.module';
 import { ReviewReactionModule } from '@modules/review-reaction/review-reaction.module';
+import { ReviewModule } from '@modules/review/review.module';
 
 const providers = [];
 
@@ -46,6 +47,7 @@ providers.push({
     ReportedCompanyModule,
     UserRolesModule,
     ReviewReactionModule,
+    ReviewModule,
   ],
   controllers: [],
   providers,

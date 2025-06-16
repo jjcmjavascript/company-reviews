@@ -1,11 +1,6 @@
-export interface ReviewWhereIn {
-  id?: {
-    in?: number[];
-  };
-}
+import { NumberIn } from '@shared/interfaces/prisma-query.interfaces';
 
-export interface ReviewWhere {
-  id?: number;
+export interface ReviewFindAll {
+  id?: number | NumberIn;
+  reportedCompanyId?: number;
 }
-
-export type ReviewCriteria = ReviewWhereIn | ReviewWhere;

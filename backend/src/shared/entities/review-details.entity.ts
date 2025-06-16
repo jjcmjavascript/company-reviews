@@ -2,9 +2,7 @@ export interface ReviewDetailPrimitive {
   id: number;
   categoryId: number;
   description?: string;
-  reportedCompanyId: number;
   score: number;
-  userReviewId: number;
 }
 
 export class ReviewDetail {
@@ -19,9 +17,7 @@ export class ReviewDetail {
       id: detail.id,
       categoryId: detail.categoryId,
       description: detail.description,
-      reportedCompanyId: detail.reportedCompanyId,
       score: detail.score,
-      userReviewId: detail.userReviewId,
     });
   }
 
@@ -31,6 +27,17 @@ export class ReviewDetail {
 
   static fromArray(details: Array<ReviewDetailPrimitive>): Array<ReviewDetail> {
     return details.map((detail) => new ReviewDetail(detail));
+  }
+
+  static fromArrayToJsonResponse(
+    details: Array<ReviewDetailPrimitive>,
+  ): Array<ReviewDetailPrimitive> {
+    return details.map((detail) => ({
+      id: detail.id,
+      categoryId: detail.categoryId,
+      description: detail.description,
+      score: detail.score,
+    }));
   }
 
   get values() {
