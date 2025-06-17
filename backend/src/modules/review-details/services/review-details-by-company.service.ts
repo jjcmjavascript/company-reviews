@@ -12,8 +12,8 @@ import { ReviewDetail } from '@shared/entities/review-details.entity';
 export class ReviewDetailsByCompanyService {
   private readonly logger = new Logger(ReviewDetailsByCompanyService.name);
   constructor(
-    private readonly reviewDetailsFindAllRepository: ReviewDetailsFindAllRepository,
     private readonly reviewFindAllService: ReviewFindAllService,
+    private readonly reviewDetailsFindAllRepository: ReviewDetailsFindAllRepository,
   ) {}
 
   async execute({ reportedCompanyId }: ReviewDetailsByCompany) {

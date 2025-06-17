@@ -8,6 +8,6 @@ import { ReviewController } from './review.controller';
   imports: [PrismaModule],
   providers: [ReviewFindAllRepository, ReviewFindAllService],
   controllers: [ReviewController],
-  exports: [ReviewFindAllService],
+  exports: [ReviewFindAllRepository, ReviewFindAllService],
 })
 export class ReviewModule {}
