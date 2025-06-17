@@ -7,7 +7,7 @@ export class ReviewDetailsController {
     private readonly byCompanyService: ReviewDetailsByCompanyService,
   ) {}
 
-  @Get('by-company/:reportedCompanyId')
+  @Get('company/:reportedCompanyId')
   async findReviewsByCompanyId(
     @Param('reportedCompanyId', ParseIntPipe) reportedCompanyId: number,
   ) {
