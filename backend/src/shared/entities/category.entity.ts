@@ -29,6 +29,16 @@ export class Category {
     return categories.map((category) => new Category(category));
   }
 
+  static fromArrayToJsonResponse(
+    categories: Array<CategoryPrimitive>,
+  ): Array<{ id: number; name: string; description?: string }> {
+    return categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      description: category.description,
+    }));
+  }
+
   get values() {
     return this.attributes;
   }

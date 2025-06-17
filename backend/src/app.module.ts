@@ -14,6 +14,7 @@ import { UserRolesModule } from '@modules/user-roles/user-roles.module';
 import { ReviewReactionModule } from '@modules/review-reaction/review-reaction.module';
 import { ReviewModule } from '@modules/review/review.module';
 import { ReviewDetailsModule } from '@modules/review-details/review-details.module';
+import { CategoryModule } from '@modules/category/category.module';
 
 const providers = [];
 
@@ -50,6 +51,7 @@ providers.push({
     ReviewReactionModule,
     ReviewModule,
     ReviewDetailsModule,
+    CategoryModule,
   ],
   controllers: [],
   providers,
