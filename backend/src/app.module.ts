@@ -15,6 +15,7 @@ import { ReviewReactionModule } from '@modules/review-reaction/review-reaction.m
 import { ReviewModule } from '@modules/review/review.module';
 import { ReviewDetailsModule } from '@modules/review-details/review-details.module';
 import { CategoryModule } from '@modules/category/category.module';
+import { ReportedCompanySummaryModule } from '@modules/reported-company-summary/reported-company-summary.module';
 
 const providers = [];
 
@@ -52,6 +53,7 @@ providers.push({
     ReviewModule,
     ReviewDetailsModule,
     CategoryModule,
+    ReportedCompanySummaryModule,
   ],
   controllers: [],
   providers,
