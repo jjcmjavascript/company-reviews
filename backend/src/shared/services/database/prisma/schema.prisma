@@ -43,15 +43,17 @@ model UserRole {
 }
 
 model ReportedCompany {
-  id          Int                      @id @default(autoincrement())
-  name        String                   @unique @db.VarChar()
-  tax         String?                  @db.VarChar()
-  description String?                  @db.Text()
-  imageUrl    String?                  @db.VarChar()
-  deletedAt   DateTime?                @db.Timestamp()
-  createdAt   DateTime                 @default(now()) @db.Timestamp()
-  comments    ReportedCompanyComment[]
-  reviews     Review[]
+  id             Int                      @id @default(autoincrement())
+  name           String                   @unique @db.VarChar()
+  tax            String?                  @db.VarChar()
+  description    String?                  @db.Text()
+  imageUrl       String?                  @db.VarChar()
+  deletedAt      DateTime?                @db.Timestamp()
+  createdAt      DateTime                 @default(now()) @db.Timestamp()
+  comments       ReportedCompanyComment[]
+  reviews        Review[]
+  companySummary CompanySummary?
+  CompanySearch  CompanySearch?
 }
 
 model ReportedCompanyComment {
@@ -131,6 +133,23 @@ model ReviewReaction {
 
   @@unique([userId, reviewId])
   @@index([reviewId, type])
+}
+
+model CompanySummary {
+  id                Int             @id @default(autoincrement())
+  reportedCompanyId Int             @unique
+  calculatedSummary String?         @db.Text()
+  summary           String?         @db.Text()
+  createdAt         DateTime        @default(now()) @db.Timestamp()
+  deletedAt         DateTime?       @db.Timestamp()
+  reportedCompany   ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
+}
+
+model CompanySearch {
+  id                Int             @id @default(autoincrement())
+  reportedCompanyId Int             @unique
+  createdAt         DateTime        @default(now()) @db.Timestamp()
+  reportedCompany   ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
 }
 
 enum ReactionType {
