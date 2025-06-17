@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { ReportedCompanySummaryPrimitive } from '@shared/entities/reported-company-summary.entity';
 import { ReportedCompanySummaryFindAll } from '../reported-company-summary.interface';
@@ -17,11 +18,9 @@ export class ReportedCompanySummaryFindService {
   async execute(
     where?: ReportedCompanySummaryFindAll,
   ): Promise<ReportedCompanySummaryPrimitive | null> {
+    let result: ReportedCompanySummaryPrimitive | null = null;
     try {
-      const result =
-        await this.reportedCompanySummaryFindRepository.execute(where);
-
-      return result;
+      result = await this.reportedCompanySummaryFindRepository.execute(where);
     } catch (error) {
       this.logger.error({
         error: `Error executing find company summary: ${error.message}`,
@@ -32,5 +31,11 @@ export class ReportedCompanySummaryFindService {
         `Error executing find company summary`,
       );
     }
+
+    if (!result) {
+      throw new NotFoundException(`Company summary not found`);
+    }
+
+    return result;
   }
 }
