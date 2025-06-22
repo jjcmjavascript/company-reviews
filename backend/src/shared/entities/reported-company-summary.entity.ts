@@ -1,6 +1,7 @@
 export interface ReportedCompanySummaryPrimitive {
   id: number;
   reportedCompanyId: number;
+  calculatedSummary: string | null;
   createdAt: Date;
 }
 
@@ -18,6 +19,7 @@ export class ReportedCompanySummaryEntity {
       id: company.id,
       reportedCompanyId: company.reportedCompanyId,
       createdAt: company.createdAt,
+      calculatedSummary: company.calculatedSummary,
     });
   }
 
@@ -33,6 +35,7 @@ export class ReportedCompanySummaryEntity {
         id: company.id,
         reportedCompanyId: company.reportedCompanyId,
         createdAt: company.createdAt,
+        calculatedSummary: company.calculatedSummary,
       };
     });
   }
@@ -42,6 +45,7 @@ export class ReportedCompanySummaryEntity {
       id: this.attributes.id,
       reportedCompanyId: this.attributes.reportedCompanyId,
       createdAt: this.attributes.createdAt,
+      calculatedSummary: this.attributes.calculatedSummary,
     };
   }
 }

@@ -3,6 +3,7 @@ export interface ReviewDetailPrimitive {
   categoryId: number;
   description?: string;
   score: number;
+  reviewId: number;
 }
 
 export class ReviewDetail {
@@ -18,6 +19,7 @@ export class ReviewDetail {
       categoryId: detail.categoryId,
       description: detail.description,
       score: detail.score,
+      reviewId: detail.reviewId,
     });
   }
 
@@ -37,6 +39,7 @@ export class ReviewDetail {
       categoryId: detail.categoryId,
       description: detail.description,
       score: detail.score,
+      reviewId: detail.reviewId,
     }));
   }
 
