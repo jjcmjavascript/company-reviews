@@ -15,10 +15,6 @@ COPY ./src/shared/services/database/prisma/schema.prisma ./src/shared/services/d
 
 RUN npm install
 
-# RUN npx prisma migrate deploy
-
-# RUN npx prisma generate
-
 COPY . .
 
 EXPOSE $PORT
