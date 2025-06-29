@@ -5,10 +5,12 @@ import { ReviewFindAllService } from './services/review-find-all.service';
 import { ReviewController } from './review.controller';
 import { ReviewCreateService } from './services/review-create.service';
 import { ReviewCreateRepository } from './repositories/review-create.repository';
+import { ReviewDetailCreateRepository } from '@modules/review-details/repositories/review-details-create.repositoy';
 
 @Module({
   imports: [PrismaModule],
   providers: [
+    ReviewDetailCreateRepository,
     ReviewFindAllRepository,
     ReviewCreateRepository,
     ReviewFindAllService,

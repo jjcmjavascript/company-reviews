@@ -5,23 +5,26 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
-import { ReviewFindAllRepository } from './repositories/review-find-all.repository';
 import { ReviewCreateDto } from './dto/review-create.dto';
 import { ReviewCreateService } from './services/review-create.service';
+import { ReviewFindDto } from './dto/review-find.dto';
+import { ReviewFindAllService } from './services/review-find-all.service';
 
 @Controller('reviews/company')
 export class ReviewController {
   constructor(
-    private readonly findAll: ReviewFindAllRepository,
+    private readonly findAllService: ReviewFindAllService,
     private readonly createService: ReviewCreateService,
   ) { }
 
   @Get(':reportedCompanyId')
   async findReviewsByCompanyId(
     @Param('reportedCompanyId', ParseIntPipe) reportedCompanyId: number,
+    @Query() params: ReviewFindDto,
   ) {
-    return this.findAll.execute({ reportedCompanyId });
+    return this.findAllService.execute(reportedCompanyId, params);
   }
 
   @Post()

@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { PaginateDto } from '@shared/dto/paginate.dto';
 import {
   IsIn,
   IsNumber,
@@ -6,7 +6,6 @@ import {
   IsPositive,
   IsString,
   MaxLength,
-  Min,
   MinLength,
 } from 'class-validator';
 
@@ -18,15 +17,7 @@ export class ReportedCompanyPaginatedQueryServiceDto {
   name: string;
 }
 
-export class ReportedCompanyListServiceDto {
-  @IsOptional()
-  @Transform(({ value }) => {
-    return Number.isNaN(Number(value)) ? false : Math.abs(Number(value));
-  })
-  @IsNumber()
-  @Min(1)
-  page?: number;
-
+export class ReportedCompanyListServiceDto extends PaginateDto {
   @IsOptional()
   @IsString()
   @IsIn(['ASC', 'DESC'])
@@ -36,14 +27,6 @@ export class ReportedCompanyListServiceDto {
   @IsString()
   @IsIn(['score', 'name', 'id'])
   orderBy?: string;
-
-  @IsOptional()
-  @Transform(({ value }) => {
-    return Number.isNaN(Number(value)) ? false : Math.abs(Number(value));
-  })
-  @IsNumber()
-  @IsPositive()
-  limit?: number;
 
   @IsOptional()
   @IsString()

@@ -3,14 +3,18 @@ import { ReviewPrimitive } from '@shared/entities/review.entity';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
 import { ReviewCreateDto } from '../dto/review-create.dto';
 import { ReviewVerificationStatus } from '@shared/enums/commons.enum';
+import { ReviewDetailCreateRepository } from '@modules/review-details/repositories/review-details-create.repositoy';
 
 @Injectable()
 export class ReviewCreateRepository {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly reviewDetailCreateRepository: ReviewDetailCreateRepository,
+  ) { }
 
   async execute(params: ReviewCreateDto): Promise<ReviewPrimitive> {
     const result = await this.prismaService.$transaction(async (ctx) => {
-      
+
       const review = await ctx.review.create({
         data: {
           userId: 1,
@@ -21,15 +25,13 @@ export class ReviewCreateRepository {
         },
       });
 
-      const reviewDetail = await ctx.reviewDetail.createManyAndReturn({
-        data: params.reviewDetails.map((reviewDetail) => ({
-          reviewId: review.id,
-          score: reviewDetail.score,
-          categoryId: reviewDetail.categoryId,
-        })),
-      });
+      const reviewDetails = await this.reviewDetailCreateRepository.executeManyTransaction(
+        ctx,
+        review.id,
+        params.reviewDetails
+      );
 
-      return {...review, reviewDetail }
+      return { ...review, reviewDetails }
     });
 
     return result as ReviewPrimitive;

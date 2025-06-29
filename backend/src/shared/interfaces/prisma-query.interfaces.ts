@@ -19,3 +19,9 @@ export interface StringContains {
 export interface Where {
   [key: string]: string | number | NumberIn | StartsWith | StringContains;
 }
+
+export interface FindMany {
+  where?: Where;
+  skip?: number;
+  take?: number;
+}

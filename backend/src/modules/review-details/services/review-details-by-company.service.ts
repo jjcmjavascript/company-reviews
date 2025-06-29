@@ -18,9 +18,7 @@ export class ReviewDetailsByCompanyService {
 
   async execute({ reportedCompanyId }: ReviewDetailsByCompany) {
     try {
-      const reviews = await this.reviewFindAllService.execute({
-        reportedCompanyId,
-      });
+      const reviews = await this.reviewFindAllService.execute(reportedCompanyId, {});
 
       const reviewIds = reviews.map((review) => review.id);
 

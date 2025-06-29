@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { ReviewCreateDto } from '../dto/review-create.dto';
 import { ReviewCreateRepository } from '../repositories/review-create.repository';
-import { ReviewPrimitive } from '@shared/entities/review.entity';
+import { Review, ReviewPrimitive } from '@shared/entities/review.entity';
 
 @Injectable()
 export class ReviewCreateService {
@@ -15,9 +15,11 @@ export class ReviewCreateService {
     private readonly reviewCreateRepository: ReviewCreateRepository,
   ) { }
 
-  async execute(params: ReviewCreateDto): Promise<ReviewPrimitive> {
+  async execute(params: ReviewCreateDto): Promise<Partial<ReviewPrimitive>> {
     try {
-      return this.reviewCreateRepository.execute(params);
+      const result = await this.reviewCreateRepository.execute(params);
+
+      return Review.toJsonResponse(result);
     } catch (error: unknown) {
       this.logger.error({
         message: 'Error on create review',

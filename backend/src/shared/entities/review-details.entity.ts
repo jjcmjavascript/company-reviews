@@ -31,6 +31,17 @@ export class ReviewDetail {
     return details.map((detail) => new ReviewDetail(detail));
   }
 
+  static toJsonResponse(
+    reviewDetail: ReviewDetailPrimitive,
+  ): Partial<ReviewDetailPrimitive> {
+    return {
+      id: reviewDetail.id,
+			categoryId: reviewDetail.categoryId,
+			score: reviewDetail.score,
+			reviewId: reviewDetail.reviewId,
+    }
+  }
+
   static fromArrayToJsonResponse(
     details: Array<ReviewDetailPrimitive>,
   ): Array<ReviewDetailPrimitive> {

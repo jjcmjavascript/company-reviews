@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma/prisma.service';
+import { calculatePaginateOffset } from '@shared/helpers/paginate.helper';
 
 @Injectable()
 export class ReportedCompanyPaginatedQuery {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService
+  ) {}
 
   async execute({
-    page = 1,
-    limit = 20,
+    page,
+    limit,
     orderBy = 'id',
     order = 'ASC',
     name,
@@ -19,7 +22,7 @@ export class ReportedCompanyPaginatedQuery {
       },
     });
 
-    const offset = (page - 1) * limit;
+    const offset = calculatePaginateOffset(page, limit);
 
     const orderByExpression = this.getOrderBySqlExpression(orderBy, order);
 

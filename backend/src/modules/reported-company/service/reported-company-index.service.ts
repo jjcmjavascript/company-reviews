@@ -19,11 +19,7 @@ export class ReportedCompanyPaginatedQueryService {
     params: Partial<ReportedCompanyPaginatedQueryParams>,
   ): Promise<ReportedCompanyPaginatedQueryResult> {
     try {
-      const queryResult = await this.rcQuery.execute({
-        ...params,
-        page: params.page || 1,
-        limit: params.limit || 20,
-      });
+      const queryResult = await this.rcQuery.execute(params);
 
       return queryResult;
     } catch (e: unknown) {

@@ -1,14 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
-import { ReviewFindAll } from '../review.interface';
+import { FindMany } from '@shared/interfaces/prisma-query.interfaces';
 
 @Injectable()
 export class ReviewFindAllRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
-  async execute(where: ReviewFindAll) {
+  async execute(params: FindMany) {
     return this.prismaService.review.findMany({
-      where,
+      ...params,
+      include: {
+        reviewDetails: {
+          select: {
+            categoryId: true,
+            score: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 }

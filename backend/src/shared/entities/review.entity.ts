@@ -1,5 +1,6 @@
 import { ReviewVerificationStatus } from '@shared/enums/commons.enum';
 import { ReviewDetailPrimitive } from './review-details.entity';
+import { UserPrimitive } from './user.entity';
 
 export interface ReviewPrimitive {
   id: number;
@@ -8,7 +9,8 @@ export interface ReviewPrimitive {
   reviewerTypeId: number;
   description: string;
   verificationStatus: ReviewVerificationStatus;
-  reviewDetail?: Array<ReviewDetailPrimitive>;
+  reviewDetails?: Array<Partial<ReviewDetailPrimitive>>;
+  user?: Partial<UserPrimitive>;
   createdAt: Date;
   deletedAt?: Date;
 }
@@ -41,6 +43,22 @@ export class Review {
     return reviews.map((review) => new Review(review));
   }
 
+  static toJsonResponse(
+    review: ReviewPrimitive,
+  ): Partial<ReviewPrimitive> {
+    return {
+      id: review.id,
+      userId: review.userId,
+      reportedCompanyId: review.reportedCompanyId,
+      reviewerTypeId: review.reviewerTypeId,
+      description: review.description,
+      verificationStatus: review.verificationStatus,
+      createdAt: review.createdAt,
+      user: review.user,
+      reviewDetails: review.reviewDetails,
+    }
+  }
+
   static fromArrayToReviewJsonResponse(
     reviews: Array<ReviewPrimitive>,
   ): Array<Partial<ReviewPrimitive>> {
@@ -53,6 +71,8 @@ export class Review {
         description: review.description,
         verificationStatus: review.verificationStatus,
         createdAt: review.createdAt,
+        user: review.user,
+        reviewDetails: review.reviewDetails,
       };
     });
   }
