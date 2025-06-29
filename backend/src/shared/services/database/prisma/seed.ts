@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import * as argon2 from 'argon2';
 import * as fs from 'node:fs';
 import { loadEnvFile } from 'node:process';
-
 import { Roles } from '../../permission/types/roles.enum';
 import { ReviewVerificationStatus } from '../../../enums/commons.enum';
 

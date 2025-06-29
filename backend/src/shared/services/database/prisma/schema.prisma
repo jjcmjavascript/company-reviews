@@ -46,7 +46,7 @@ model ReportedCompany {
   id             Int                      @id @default(autoincrement())
   name           String                   @unique @db.VarChar()
   tax            String?                  @db.VarChar()
-  description    String?                  @db.Text()
+  description    String?                  @db.VarChar()
   imageUrl       String?                  @db.VarChar()
   deletedAt      DateTime?                @db.Timestamp()
   createdAt      DateTime                 @default(now()) @db.Timestamp()
@@ -72,8 +72,8 @@ model Review {
   userId             Int
   reportedCompanyId  Int
   reviewerTypeId     Int
-  review             String?
-  verificationStatus String?
+  description        String?          @db.Text()
+  verificationStatus String?          @db.VarChar()
   createdAt          DateTime         @default(now()) @db.Timestamp()
   deletedAt          DateTime?        @db.Timestamp()
   reviewDetails      ReviewDetail[]
