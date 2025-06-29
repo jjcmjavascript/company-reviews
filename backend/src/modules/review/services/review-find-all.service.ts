@@ -13,7 +13,7 @@ export class ReviewFindAllService {
   private readonly logger = new Logger(ReviewFindAllService.name);
   constructor(
     private readonly reviewFindAllRepository: ReviewFindAllRepository,
-  ) { }
+  ) {}
 
   async execute(reportedCompanyId: number, params: ReviewFindDto) {
     try {
@@ -24,18 +24,20 @@ export class ReviewFindAllService {
       if (page && limit) {
         pagination = {
           skip: calculatePaginateOffset(page, limit),
-          take: params.limit
-        }
+          take: params.limit,
+        };
       }
 
       const findAll = {
         where: {
           reportedCompanyId,
-          ...query
+          ...query,
         },
-       
-      }
-      const result = await this.reviewFindAllRepository.execute({...findAll, ...pagination});
+      };
+      const result = await this.reviewFindAllRepository.execute({
+        ...findAll,
+        ...pagination,
+      });
 
       return Review.fromArrayToReviewJsonResponse(result as ReviewPrimitive[]);
     } catch (error) {

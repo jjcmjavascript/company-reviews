@@ -10,7 +10,7 @@ import {
 import { ReportedCompanyPaginatedQueryService } from './service/reported-company-index.service';
 import {
   ReportedCompanyCreateDto,
-  ReportedCompanyPaginatedQueryServiceDto,
+  ReportedCompanySearchServiceDto,
   ReportedCompanyListServiceDto,
 } from './reported-company.dto';
 import { HasRoles } from '@shared/decorators/user-roles.decorator';
@@ -30,9 +30,20 @@ export class ReportedCompanyController {
     private readonly reportedCompanyFindService: ReportedCompanyFindService,
   ) {}
 
+  /**
+   * Endpoint usado en la búsqueda de empresas reportadas.
+   */
   @Get()
-  async index(@Query() params: ReportedCompanyPaginatedQueryServiceDto) {
+  async search(@Query() params: ReportedCompanySearchServiceDto) {
     return await this.reportedCompanySearchService.execute(params);
+  }
+
+  /**
+   * Endpoint usado para listar las empresas reportadas
+   */
+  @Get('paginated')
+  async list(@Query() params: ReportedCompanyListServiceDto) {
+    return await this.reportedCompanyIndexService.execute(params);
   }
 
   @Post()
@@ -40,13 +51,6 @@ export class ReportedCompanyController {
   @HasRoles(Roles.Admin)
   async create(@Body() params: ReportedCompanyCreateDto) {
     return await this.reportedCompanyCreateService.execute(params);
-  }
-
-  @Get('paginated')
-  async list(@Query() params: ReportedCompanyListServiceDto) {
-    return await this.reportedCompanyIndexService.execute(
-      params as ReportedCompanyPaginatedQueryParams,
-    );
   }
 
   @Get(':id')

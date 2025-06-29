@@ -4,7 +4,7 @@ import { FindMany } from '@shared/interfaces/prisma-query.interfaces';
 
 @Injectable()
 export class ReviewFindAllRepository {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async execute(params: FindMany) {
     return this.prismaService.review.findMany({

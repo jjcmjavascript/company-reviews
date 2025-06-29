@@ -1,15 +1,13 @@
 import { PaginateDto } from '@shared/dto/paginate.dto';
 import {
   IsIn,
-  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-export class ReportedCompanyPaginatedQueryServiceDto {
+export class ReportedCompanySearchServiceDto {
   @IsOptional()
   @IsString()
   @MaxLength(100)
