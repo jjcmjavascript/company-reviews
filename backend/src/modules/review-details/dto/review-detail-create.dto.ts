@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 
 export class ReviewDetailCreateDto {
   @IsNotEmpty({ message: 'Category ID is required' })

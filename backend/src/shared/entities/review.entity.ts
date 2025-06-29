@@ -1,12 +1,14 @@
 import { ReviewVerificationStatus } from '@shared/enums/commons.enum';
+import { ReviewDetailPrimitive } from './review-details.entity';
 
 export interface ReviewPrimitive {
   id: number;
   userId: number;
   reportedCompanyId: number;
   reviewerTypeId: number;
-  review: string;
+  description: string;
   verificationStatus: ReviewVerificationStatus;
+  reviewDetail?: Array<ReviewDetailPrimitive>;
   createdAt: Date;
   deletedAt?: Date;
 }
@@ -24,7 +26,7 @@ export class Review {
       userId: review.userId,
       reportedCompanyId: review.reportedCompanyId,
       reviewerTypeId: review.reviewerTypeId,
-      review: review.review,
+      description: review.description,
       verificationStatus: review.verificationStatus,
       createdAt: review.createdAt,
       deletedAt: review.deletedAt,
@@ -48,7 +50,7 @@ export class Review {
         userId: review.userId,
         reportedCompanyId: review.reportedCompanyId,
         reviewerTypeId: review.reviewerTypeId,
-        review: review.review,
+        description: review.description,
         verificationStatus: review.verificationStatus,
         createdAt: review.createdAt,
       };
