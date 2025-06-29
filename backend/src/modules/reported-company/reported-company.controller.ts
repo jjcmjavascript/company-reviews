@@ -7,7 +7,6 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ReportedCompanyPaginatedQueryService } from './service/reported-company-index.service';
 import {
   ReportedCompanyCreateDto,
   ReportedCompanySearchServiceDto,
@@ -18,13 +17,13 @@ import { Roles } from '@shared/services/permission/types/roles.enum';
 import { ReportedCompanyCreateService } from './service/reported-company-create.service';
 import { ReportedCompanySearchService } from './service/reported-company-search.service';
 import { ReportedCompanyFindService } from './service/reported-company-find.service';
-import { ReportedCompanyPaginatedQueryParams } from '@shared/services/queries/reported-company-index.query';
 import { Loged } from '@shared/decorators/loged.decorator';
+import { ReportedCompanyListService } from './service/reported-company-list.service';
 
 @Controller('companies')
 export class ReportedCompanyController {
   constructor(
-    private readonly reportedCompanyIndexService: ReportedCompanyPaginatedQueryService,
+    private readonly reportedCompanyListService: ReportedCompanyListService,
     private readonly reportedCompanyCreateService: ReportedCompanyCreateService,
     private readonly reportedCompanySearchService: ReportedCompanySearchService,
     private readonly reportedCompanyFindService: ReportedCompanyFindService,
@@ -43,7 +42,7 @@ export class ReportedCompanyController {
    */
   @Get('paginated')
   async list(@Query() params: ReportedCompanyListServiceDto) {
-    return await this.reportedCompanyIndexService.execute(params);
+    return await this.reportedCompanyListService.execute(params);
   }
 
   @Post()

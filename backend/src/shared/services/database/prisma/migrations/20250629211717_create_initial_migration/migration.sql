@@ -1,3 +1,9 @@
+-- CreateEnum
+CREATE TYPE "ReactionType" AS ENUM ('LIKE', 'DISLIKE');
+
+-- CreateEnum
+CREATE TYPE "ReviewVerificationStatus" AS ENUM ('NOT_VERIFIED', 'PENDING', 'APPROVED', 'REJECTED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -7,6 +13,7 @@ CREATE TABLE "User" (
     "lastname" VARCHAR,
     "tax" VARCHAR,
     "deletedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -65,7 +72,7 @@ CREATE TABLE "Review" (
     "reportedCompanyId" INTEGER NOT NULL,
     "reviewerTypeId" INTEGER NOT NULL,
     "description" TEXT,
-    "verificationStatus" TEXT,
+    "verificationStatus" "ReviewVerificationStatus" DEFAULT 'NOT_VERIFIED',
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deletedAt" TIMESTAMP,
 
@@ -114,6 +121,52 @@ CREATE TABLE "Category" (
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "ReviewReaction" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "reviewId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deletedAt" TIMESTAMP,
+    "type" "ReactionType" NOT NULL DEFAULT 'LIKE',
+
+    CONSTRAINT "ReviewReaction_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CompanySummary" (
+    "id" SERIAL NOT NULL,
+    "reportedCompanyId" INTEGER NOT NULL,
+    "calculatedSummary" TEXT,
+    "summary" TEXT,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deletedAt" TIMESTAMP,
+
+    CONSTRAINT "CompanySummary_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CompanySearch" (
+    "id" SERIAL NOT NULL,
+    "reportedCompanyId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "CompanySearch_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CompanyCategoryScore" (
+    "id" SERIAL NOT NULL,
+    "reportedCompanyId" INTEGER NOT NULL,
+    "categoryId" INTEGER NOT NULL,
+    "verifiedScore" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "unverifiedScore" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deletedAt" TIMESTAMP,
+
+    CONSTRAINT "CompanyCategoryScore_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_uuid_key" ON "User"("uuid");
 
@@ -122,6 +175,30 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Password_userId_key" ON "Password"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ReportedCompany_name_key" ON "ReportedCompany"("name");
+
+-- CreateIndex
+CREATE INDEX "ReviewReaction_reviewId_type_idx" ON "ReviewReaction"("reviewId", "type");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ReviewReaction_userId_reviewId_key" ON "ReviewReaction"("userId", "reviewId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CompanySummary_reportedCompanyId_key" ON "CompanySummary"("reportedCompanyId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CompanySearch_reportedCompanyId_key" ON "CompanySearch"("reportedCompanyId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CompanyCategoryScore_reportedCompanyId_key" ON "CompanyCategoryScore"("reportedCompanyId");
+
+-- CreateIndex
+CREATE INDEX "CompanyCategoryScore_reportedCompanyId_categoryId_idx" ON "CompanyCategoryScore"("reportedCompanyId", "categoryId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CompanyCategoryScore_reportedCompanyId_categoryId_key" ON "CompanyCategoryScore"("reportedCompanyId", "categoryId");
 
 -- AddForeignKey
 ALTER TABLE "Password" ADD CONSTRAINT "Password_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -155,3 +232,21 @@ ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_categoryId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "ReviewDetail" ADD CONSTRAINT "ReviewDetail_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewReaction" ADD CONSTRAINT "ReviewReaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewReaction" ADD CONSTRAINT "ReviewReaction_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompanySummary" ADD CONSTRAINT "CompanySummary_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompanySearch" ADD CONSTRAINT "CompanySearch_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompanyCategoryScore" ADD CONSTRAINT "CompanyCategoryScore_reportedCompanyId_fkey" FOREIGN KEY ("reportedCompanyId") REFERENCES "ReportedCompany"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompanyCategoryScore" ADD CONSTRAINT "CompanyCategoryScore_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;

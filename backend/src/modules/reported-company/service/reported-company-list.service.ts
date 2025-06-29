@@ -3,34 +3,40 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { ReportedCompanyPaginatedQueryResult } from '@shared/services/queries/reported-company-index.query';
-import { ReportedCompanyFindAllPaginatedRepository } from '../repositories/reported-company-find-all-paginated.repository';
+
 import { ReportedCompanyListServiceDto } from '../reported-company.dto';
+import { ReportedCompanyListQuery } from '@shared/services/queries/reported-company-index/reported-company-index.query';
+import {
+  OrderByField,
+  ReportedCompanyPaginatedQueryResult,
+} from '@shared/services/queries/reported-company-index/reported-company-index.query.interface';
+import { OrderDirection } from '@shared/interfaces/prisma-query.interfaces';
 
 @Injectable()
 export class ReportedCompanyListService {
   private logger = new Logger(ReportedCompanyListService.name);
 
-  constructor(
-    private readonly repository: ReportedCompanyFindAllPaginatedRepository,
-  ) {}
+  constructor(private readonly repository: ReportedCompanyListQuery) {}
 
   async execute(
     params: ReportedCompanyListServiceDto,
   ): Promise<ReportedCompanyPaginatedQueryResult> {
     try {
-      const { limit = 6 } = params;
+      const { limit = 6, order, orderBy } = params;
 
       const queryResult = await this.repository.execute({
-        skip: 0,
-        take: limit,
+        limit,
+        order: order as OrderDirection,
+        orderBy: orderBy as OrderByField,
       });
 
       return queryResult;
     } catch (e: unknown) {
-      this.logger.error(
-        `An error happened when list was loading: ${(e as Error).message}`,
-      );
+      this.logger.error({
+        message: 'Error when listing reported companies',
+        error: e,
+        params,
+      });
 
       throw new InternalServerErrorException(
         'An error happened when list was loading',

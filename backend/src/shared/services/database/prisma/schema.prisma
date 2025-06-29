@@ -43,17 +43,18 @@ model UserRole {
 }
 
 model ReportedCompany {
-  id             Int                      @id @default(autoincrement())
-  name           String                   @unique @db.VarChar()
-  tax            String?                  @db.VarChar()
-  description    String?                  @db.VarChar()
-  imageUrl       String?                  @db.VarChar()
-  deletedAt      DateTime?                @db.Timestamp()
-  createdAt      DateTime                 @default(now()) @db.Timestamp()
-  comments       ReportedCompanyComment[]
-  reviews        Review[]
-  companySummary CompanySummary?
-  CompanySearch  CompanySearch?
+  id                   Int                      @id @default(autoincrement())
+  name                 String                   @unique @db.VarChar()
+  tax                  String?                  @db.VarChar()
+  description          String?                  @db.VarChar()
+  imageUrl             String?                  @db.VarChar()
+  deletedAt            DateTime?                @db.Timestamp()
+  createdAt            DateTime                 @default(now()) @db.Timestamp()
+  comments             ReportedCompanyComment[]
+  reviews              Review[]
+  companySummary       CompanySummary?
+  companySearch        CompanySearch?
+  companyCategoryScore CompanyCategoryScore?
 }
 
 model ReportedCompanyComment {
@@ -68,18 +69,18 @@ model ReportedCompanyComment {
 }
 
 model Review {
-  id                 Int              @id @default(autoincrement())
+  id                 Int                       @id @default(autoincrement())
   userId             Int
   reportedCompanyId  Int
   reviewerTypeId     Int
-  description        String?          @db.Text()
-  verificationStatus String?          @db.VarChar()
-  createdAt          DateTime         @default(now()) @db.Timestamp()
-  deletedAt          DateTime?        @db.Timestamp()
+  description        String?                   @db.Text()
+  verificationStatus ReviewVerificationStatus? @default(NOT_VERIFIED)
+  createdAt          DateTime                  @default(now()) @db.Timestamp()
+  deletedAt          DateTime?                 @db.Timestamp()
   reviewDetails      ReviewDetail[]
-  reviewerType       ReviewerType     @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
-  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reportedCompany    ReportedCompany  @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
+  reviewerType       ReviewerType              @relation(fields: [reviewerTypeId], references: [id], onDelete: Cascade)
+  user               User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reportedCompany    ReportedCompany           @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
   ReviewReaction     ReviewReaction[]
 }
 
@@ -119,6 +120,7 @@ model Category {
   createdAt            DateTime               @default(now()) @db.Timestamp()
   reviewerTypeCategory ReviewerTypeCategory[]
   ReviewDetail         ReviewDetail[]
+  CompanyCategoryScore CompanyCategoryScore[]
 }
 
 model ReviewReaction {
@@ -152,7 +154,29 @@ model CompanySearch {
   reportedCompany   ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
 }
 
+model CompanyCategoryScore {
+  id                Int             @id @default(autoincrement())
+  reportedCompanyId Int             @unique
+  categoryId        Int
+  verifiedScore     Float           @default(0)
+  unverifiedScore   Float           @default(0)
+  createdAt         DateTime        @default(now()) @db.Timestamp()
+  deletedAt         DateTime?       @db.Timestamp()
+  reportedCompany   ReportedCompany @relation(fields: [reportedCompanyId], references: [id], onDelete: Cascade)
+  category          Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([reportedCompanyId, categoryId])
+  @@index([reportedCompanyId, categoryId])
+}
+
 enum ReactionType {
   LIKE
   DISLIKE
+}
+
+enum ReviewVerificationStatus {
+  NOT_VERIFIED
+  PENDING
+  APPROVED
+  REJECTED
 }

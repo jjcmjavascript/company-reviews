@@ -1,23 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@shared/services/database/prisma/prisma.service';
-import { ReportedCompanyPaginatedQuery } from '@shared/services/queries/reported-company-index.query';
+import { ReportedCompanyListQuery } from '@shared/services/queries/reported-company-index.query';
 import { mockDeep } from 'jest-mock-extended';
 
-describe('ReportedCompanyPaginatedQuery', () => {
-  let query: ReportedCompanyPaginatedQuery;
+describe('ReportedCompanyListQuery', () => {
+  let query: ReportedCompanyListQuery;
   let prismaService: jest.Mocked<PrismaService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ReportedCompanyPaginatedQuery,
+        ReportedCompanyListQuery,
         { provide: PrismaService, useValue: mockDeep<PrismaService>() },
       ],
     }).compile();
 
-    query = module.get<ReportedCompanyPaginatedQuery>(
-      ReportedCompanyPaginatedQuery,
-    );
+    query = module.get<ReportedCompanyListQuery>(ReportedCompanyListQuery);
     prismaService = module.get(PrismaService);
   });
 

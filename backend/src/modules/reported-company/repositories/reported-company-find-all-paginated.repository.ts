@@ -10,7 +10,7 @@ export class ReportedCompanyFindAllPaginatedRepository {
     return this.prismaService.reportedCompany.findMany({
       ...params,
       include: {
-        CompanyCategoryScore: {
+        companyCategoryScore: {
           select: {
             categoryId: true,
             verifiedScore: true,

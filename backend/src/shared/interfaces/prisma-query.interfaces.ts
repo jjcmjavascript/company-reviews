@@ -20,6 +20,8 @@ export interface Where {
   [key: string]: string | number | NumberIn | StartsWith | StringContains;
 }
 
+export type OrderDirection = 'ASC' | 'DESC';
+
 export interface FindMany {
   where?: Where;
   skip?: number;

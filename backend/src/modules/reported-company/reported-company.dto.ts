@@ -23,7 +23,7 @@ export class ReportedCompanyListServiceDto extends PaginateDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(['score', 'name', 'id'])
+  @IsIn(['verifiedScore', 'unverifiedScore', 'name', 'id'])
   orderBy?: string;
 
   @IsOptional()

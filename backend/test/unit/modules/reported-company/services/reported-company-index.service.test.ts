@@ -1,24 +1,24 @@
-import { ReportedCompanyPaginatedQueryService } from '@modules/reported-company/service/reported-company-index.service';
+import { ReportedCompanyListQueryService } from '@modules/reported-company/service/reported-company-index.service';
 import { Test } from '@nestjs/testing';
-import { ReportedCompanyPaginatedQuery } from '@shared/services/queries/reported-company-index.query';
+import { ReportedCompanyListQuery } from '@shared/services/queries/reported-company-index.query';
 import { getPrismaMock } from '../../../mocks/prisma.service.mock';
 import { getReportedCompanyPaginatedQueryResultMocks } from '../../../mocks/entities/reported-company.mock';
 
-describe('[Service] ReportedCompanyPaginatedQueryService', () => {
-  let reportedCompanyIndexQuery: ReportedCompanyPaginatedQuery;
-  let reportedCompanyIndexService: ReportedCompanyPaginatedQueryService;
+describe('[Service] ReportedCompanyListQueryService', () => {
+  let reportedCompanyIndexQuery: ReportedCompanyListQuery;
+  let reportedCompanyIndexService: ReportedCompanyListQueryService;
 
   beforeAll(async () => {
     const ref = await Test.createTestingModule({
       providers: [
         getPrismaMock(),
-        ReportedCompanyPaginatedQuery,
-        ReportedCompanyPaginatedQueryService,
+        ReportedCompanyListQuery,
+        ReportedCompanyListQueryService,
       ],
     }).compile();
 
-    reportedCompanyIndexQuery = ref.get(ReportedCompanyPaginatedQuery);
-    reportedCompanyIndexService = ref.get(ReportedCompanyPaginatedQueryService);
+    reportedCompanyIndexQuery = ref.get(ReportedCompanyListQuery);
+    reportedCompanyIndexService = ref.get(ReportedCompanyListQueryService);
   });
 
   it('It should return an grouped array when has data', async () => {

@@ -84,6 +84,31 @@ const getReviewDetails = (
   );
 };
 
+const getCompaniesScore = (
+  reportedCompanies: { id: number }[],
+  categories: { id: number; name: string }[],
+) => {
+  const companyCategoryScores: {
+    reportedCompanyId: number;
+    categoryId: number;
+    verifiedScore: number;
+    unverifiedScore: number;
+  }[] = [];
+
+  reportedCompanies.forEach((company) => {
+    categories.forEach((category) => {
+      companyCategoryScores.push({
+        reportedCompanyId: company.id,
+        categoryId: category.id,
+        verifiedScore: 5,
+        unverifiedScore: 5,
+      });
+    });
+  });
+
+  return companyCategoryScores;
+};
+
 async function main() {
   const checkIfFileExists = fs.existsSync('seed.json');
   const userCount = await prisma.user.count();
@@ -162,7 +187,19 @@ async function main() {
       data: reviewDetails,
       skipDuplicates: true,
     });
+
+    const companyCategoryScores = getCompaniesScore(
+      reportedCompanies,
+      categories,
+    );
+
+    await tx.companyCategoryScore.createMany({
+      data: companyCategoryScores,
+      skipDuplicates: true,
+    });
   });
+
+  console.info('Database seeded successfully! 🌱🌱🌱🌱🌱');
 }
 
 main()
