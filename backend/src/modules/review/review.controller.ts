@@ -17,7 +17,7 @@ export class ReviewController {
   constructor(
     private readonly findAllService: ReviewFindAllService,
     private readonly createService: ReviewCreateService,
-  ) { }
+  ) {}
 
   @Get(':reportedCompanyId')
   async findReviewsByCompanyId(
