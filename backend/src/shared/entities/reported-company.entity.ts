@@ -1,3 +1,5 @@
+import { CompanyCategoryScorePrimitive } from './company-category-score.entity';
+
 export interface ReportedCompanyPrimitive {
   id: number;
   name: string;
@@ -5,6 +7,7 @@ export interface ReportedCompanyPrimitive {
   description?: string;
   imageUrl?: string;
   createdAt?: Date;
+  companyCategoryScore?: Partial<CompanyCategoryScorePrimitive>[];
 }
 
 export class ReportedCompany {
@@ -22,6 +25,7 @@ export class ReportedCompany {
       imageUrl: company.imageUrl,
       tax: company.tax,
       createdAt: company.createdAt,
+      companyCategoryScore: company.companyCategoryScore || [],
     });
   }
 
@@ -43,6 +47,7 @@ export class ReportedCompany {
       description: this.attributes.description,
       imageUrl: this.attributes.imageUrl,
       createdAt: this.attributes.createdAt,
+      companyCategoryScore: this.attributes.companyCategoryScore,
     };
   }
 }

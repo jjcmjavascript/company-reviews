@@ -40,7 +40,7 @@ export class ReportedCompanyController {
   /**
    * Endpoint usado para listar las empresas reportadas
    */
-  @Get('paginated')
+  @Get('list')
   async list(@Query() params: ReportedCompanyListServiceDto) {
     return await this.reportedCompanyListService.execute(params);
   }

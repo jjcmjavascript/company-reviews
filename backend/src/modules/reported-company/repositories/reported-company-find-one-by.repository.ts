@@ -12,6 +12,15 @@ export class ReportedCompanyFindOneByRepository {
   ): Promise<ReportedCompanyPrimitive> {
     const result = await this.prismaService.reportedCompany.findFirst({
       where: params,
+      include: {
+        companyCategoryScore: {
+          select: {
+            verifiedScore: true,
+            unverifiedScore: true,
+            categoryId: true,
+          },
+        },
+      },
     });
 
     return result;

@@ -192,9 +192,6 @@ CREATE UNIQUE INDEX "CompanySummary_reportedCompanyId_key" ON "CompanySummary"("
 CREATE UNIQUE INDEX "CompanySearch_reportedCompanyId_key" ON "CompanySearch"("reportedCompanyId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "CompanyCategoryScore_reportedCompanyId_key" ON "CompanyCategoryScore"("reportedCompanyId");
-
--- CreateIndex
 CREATE INDEX "CompanyCategoryScore_reportedCompanyId_categoryId_idx" ON "CompanyCategoryScore"("reportedCompanyId", "categoryId");
 
 -- CreateIndex

@@ -54,7 +54,7 @@ model ReportedCompany {
   reviews              Review[]
   companySummary       CompanySummary?
   companySearch        CompanySearch?
-  companyCategoryScore CompanyCategoryScore?
+  companyCategoryScore CompanyCategoryScore[]
 }
 
 model ReportedCompanyComment {
@@ -156,7 +156,7 @@ model CompanySearch {
 
 model CompanyCategoryScore {
   id                Int             @id @default(autoincrement())
-  reportedCompanyId Int             @unique
+  reportedCompanyId Int
   categoryId        Int
   verifiedScore     Float           @default(0)
   unverifiedScore   Float           @default(0)
