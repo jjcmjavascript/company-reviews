@@ -6,8 +6,9 @@ import { Response } from 'express';
 import { UserFindOneRepository } from '@modules/users/repositories/user-find-one.repository';
 import { PasswordFindOneRepository } from '@modules/password/password-find-one.repository';
 import { Roles } from '@shared/services/permission/types/roles.enum';
-import { config } from '@config/config';
 import { UserRolesFindOneRepository } from '@modules/user-roles/repositories/user-roles-find-one.repository';
+import { ConfigService } from '@nestjs/config';
+import { Config } from '@config/config.interface';
 
 @Injectable()
 export class AuthJwtSingInRepostory {
@@ -16,6 +17,7 @@ export class AuthJwtSingInRepostory {
     private userRolesFindOneRepository: UserRolesFindOneRepository,
     private passwordFindOneRepository: PasswordFindOneRepository,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async signIn(
@@ -24,7 +26,7 @@ export class AuthJwtSingInRepostory {
     password: string,
   ): Promise<void> {
     const user = await this.userFindOneRepository.execute({ email }, false);
-
+    const config = this.configService.get<Config>('config');
     const userPassword = user
       ? (
           await this.passwordFindOneRepository.execute(user.values.id)

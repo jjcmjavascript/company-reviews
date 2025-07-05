@@ -16,10 +16,13 @@ import { ReviewModule } from '@modules/review/review.module';
 import { ReviewDetailsModule } from '@modules/review-details/review-details.module';
 import { CategoryModule } from '@modules/category/category.module';
 import { ReportedCompanySummaryModule } from '@modules/reported-company-summary/reported-company-summary.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtConfig } from '@config/config.interface';
 
 const providers = [];
 
-if (config.app.isProduction) {
+if (process.env.SENTRY_DSN) {
   providers.push({
     provide: APP_FILTER,
     useClass: SentryGlobalFilter,
@@ -44,6 +47,24 @@ providers.push({
         limit: 10,
       },
     ]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
+    JwtModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const jwtConfig = configService.get<JwtConfig>('jwt');
+        return {
+          secret: jwtConfig.jwtSecret,
+          signOptions: {
+            expiresIn: jwtConfig.jwtExpiresIn,
+          },
+        };
+      },
+    }),
     SentryModule.forRoot(),
     UserModule,
     AuthModule,

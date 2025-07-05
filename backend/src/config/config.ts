@@ -1,11 +1,12 @@
 import 'dotenv/config';
+import { Config } from './config.interface';
 
 const jwtSecret = process.env.SECRET;
 const isProduction = process.env.NODE_ENV === 'production';
-const port = process.env.SERVER_PORT || 3001;
-const origins = process.env.ORIGINS?.split(';') || 'http://localhost:3000';
+const port = process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT) : 3001;
+const origins = process.env.ORIGINS?.split(';') || ['http://localhost:3000'];
 
-export const config = {
+export const config = (): Config => ({
   app: {
     port,
     isProduction,
@@ -19,10 +20,7 @@ export const config = {
     jwtExpiresIn: 3600000 / 2,
     jwtRefreshExpiresIn: 3600000, // 1hr
   },
-  pushNotification: {
-    token: process.env.EXPO_ACCESS_TOKEN,
-  },
   sentry: {
     dsn: process.env.SENTRY_DSN,
   },
-};
+});

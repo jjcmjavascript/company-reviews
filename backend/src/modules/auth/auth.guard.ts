@@ -11,6 +11,8 @@ import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { AuthJwtRefreshRepository } from './repositories/auth-jwt-refresh.repository';
 import { IS_LOGED_KEY } from '@shared/decorators/loged.decorator';
+import { ConfigService } from '@nestjs/config';
+import { Config } from '@config/config.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,9 +20,11 @@ export class AuthGuard implements CanActivate {
     private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
     private readonly refreshTokenRepository: AuthJwtRefreshRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const config = this.configService.get<Config>('config');
     const hasTobeLoged = this.reflector.get<boolean>(
       IS_LOGED_KEY,
       context.getHandler(),
@@ -58,6 +62,7 @@ export class AuthGuard implements CanActivate {
 
   private async tryRefreshToken(request: Request): Promise<boolean> {
     try {
+      const config = this.configService.get<Config>('config');
       const refreshToken = this.extractTokenFromHeader(
         request,
         'refresh_token',

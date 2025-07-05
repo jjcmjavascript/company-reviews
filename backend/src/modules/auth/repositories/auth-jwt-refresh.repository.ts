@@ -1,5 +1,6 @@
-import { config } from '@config/config';
+import { Config } from '@config/config.interface';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
@@ -10,10 +11,14 @@ export interface Tokens {
 
 @Injectable()
 export class AuthJwtRefreshRepository {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async refreshTokens(request: Request, refreshToken: string): Promise<Tokens> {
     try {
+      const config = this.configService.get<Config>('config');
       const verifyResult = await this.jwtService.verifyAsync(refreshToken, {
         secret: config.jwt.jwtSecret,
       });
