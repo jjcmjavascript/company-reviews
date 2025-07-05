@@ -1,169 +1,141 @@
-## Guia de Instalacion - Installation Guide
+# Report Company Backend
 
-## Para todas las instancialaciones - For all installations
+Backend para la aplicación Report Company, construido con NestJS, Prisma y PostgreSQL.
 
-### Crear archivo .env - Create .env file
+---
 
-```bash
-cp example.env .env
-```
+## 📜 Tabla de Contenidos
 
-### Configurar archivo .env - Configure .env file
+- [✨ Características](#-características)
+- [🛠️ Tecnologías](#️-tecnologías)
+- [🚀 Instalación](#-instalación)
+  - [🐳 Docker](#-docker)
+  - [💻 Local](#-local)
+- [▶️ Uso](#️-uso)
+- [⚙️ Comandos Adicionales](#️-comandos-adicionales)
+- [📞 Contacto](#-contacto)
 
-los valores están en: https://trello.com/c/qxPbMVZX/8-env-backend
-the values are in: https://trello.com/c/qxPbMVZX/8-env-backend
+---
 
-```bash
-nano .env
-```
+## ✨ Características
 
-o puede mover el archivo .env.example a .env y cambiar los valores
-or you can move the file .env.example to .env and change the values
+- 🔐 Autenticación de usuarios
+- 🏢 Gestión de empresas
+- 📝 Creación y gestión de reportes
+- ⭐ Sistema de calificación
+- 💬 Comentarios en los reportes
 
-```bash
-mv .env.example .env
-```
+---
 
-Si vas a usar docker debes cambiar el valor de DATABASE_URL y PORT por
-If you are going to use Docker you must change the value of DATABASE_URL and PORT to
+## 🛠️ Tecnologías
 
-```env
-DATABASE_PORT=5433
-DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@reportedcompanydb:${DATABASE_PORT}/${DATABASE_NAME}?schema=public&sslmode=prefer"
-```
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Framework:** [NestJS](https://nestjs.com/)
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **Base de Datos:** [PostgreSQL](https://www.postgresql.org/)
+- **Contenedores:** [Docker](https://www.docker.com/)
 
-## Instalacion - Docker - dev | Installation - Docker - dev
+---
 
-### Requisitos - Requirements
+## 🚀 Instalación
 
-Docker version 22.10.0+
+### Configuración Inicial (Para ambas instalaciones)
 
-### Darle permisos de ejecución al archivo: dev-entry.sh | Give execute permissions to the file: dev-entry.sh
+1.  **Crear archivo `.env`:**
+    ```bash
+    cp example.env .env
+    ```
+2.  **Configurar variables de entorno:**
+    - Los valores se encuentran en [Trello](https://trello.com/c/qxPbMVZX/8-env-backend).
+    - Edita el archivo `.env` con tu editor preferido:
+      ```bash
+      nano .env
+      ```
 
-En ubuntu | In ubuntu
+### 🐳 Docker
 
-```bash
-chmod +x dev-entry.sh
-```
+#### Requisitos
 
-Si no puedes darle permisos al archivo puedes
-If you can't give permissions to the file you can
+- Docker v22.10.0+
 
-descomentar la linea en el archivo docker-compose.yml:
-uncomment the line in the file docker-compose.yml:
+#### Pasos
 
-```yaml
-command:
-  [
-    'sh',
-    '-c',
-    'npx prisma migrate deploy && npx prisma generate && npm run dev',
-  ]
-```
+1.  **Permisos de ejecución para `dev-entry.sh`:**
+    ```bash
+    chmod +x dev-entry.sh
+    ```
+    > **Nota:** Si no puedes dar permisos, descomenta la sección `command` en `docker-compose.yml` y comenta la línea `command: ['./dev-entry.sh']`.
 
-y comentar esta linea:
-and comment this line:
+2.  **Injectar seeds (opcional):**
+    - Para poblar la base de datos con datos iniciales, asegúrate de que el archivo `seed.json` esté en la raíz del proyecto.
 
-```yaml
-command: ['./dev-entry.sh']
-```
+3.  **Levantar los contenedores:**
+    ```bash
+    docker-compose up --build
+    ```
+    - Para ejecutar en segundo plano:
+      ```bash
+      docker-compose up --build -d
+      ```
 
-### Inyectar seeds en la base de datos | Inject seeds into the database
+### 💻 Local
 
-para que al levantar el contenedor se inyecten los seeds en la base de datos
-to inject seeds into the database when the container starts
+#### Requisitos
 
-debe agregar el archivo seed.json a la raíz del proyecto
-you must add the file seed.json to the root of the project
+- Node.js v20.0.0+
+- PostgreSQL v16.0.0+
 
-### Correr el proyecto - Run the project
+#### Pasos
 
-La primera vez que se ejecute se creará la base de datos
-The first time you run it, the database will be created
+1.  **Instalar dependencias:**
+    ```bash
+    npm install
+    ```
+2.  **Instalar `dotenv-cli` globalmente:**
+    ```bash
+    npm install -g dotenv-cli
+    ```
+3.  **Crear la base de datos:**
+    ```bash
+    npm run db:create
+    ```
+4.  **Correr migraciones:**
+    ```bash
+    npx prisma migrate deploy
+    ```
 
-```bash
-docker-compose up --build
-```
+---
 
-### Correr el proyecto en segundo plano | Run the project in the background
+## ▶️ Uso
 
-```bash
-docker-compose up --build -d
-```
+- **Iniciar la aplicación en modo desarrollo:**
+  ```bash
+  npm run dev
+  ```
 
-### Ejecutar test en docker - Run tests in docker
+---
 
-```bash
-docker exec -it backend-nest sh
-```
+## ⚙️ Comandos Adicionales
 
-Una vez dentro del contenedor
-Once inside the container
+- **Crear una migración:**
+  ```bash
+  npx prisma migrate dev --name <nombre-de-la-migracion> && npx prisma generate
+  ```
+- **Correr tests:**
+  - **Dentro de Docker:**
+    ```bash
+    docker exec -it backend-nest sh
+    npm run test
+    ```
+  - **Localmente:**
+    ```bash
+    npm run test
+    ```
 
-```bash
-npm run test
-```
+---
 
-## Instalacion regular - Regular installation
+## 📞 Contacto
 
-### Requisitos - Requirements
-
-Node version 20.0.0+
-PostgreSQL version 16.0.0+
-
-### Instalacion de dependencias - Install dependencies
-
-```bash
-npm install
-```
-
-Necesitas instalar dotenv-cli para usar diferentes archivos .env y ejecutar tests
-You need to install dotenv-cli to use different .env files and execute tests
-
-```bash
-npm install -g dotenv-cli
-```
-
-### Crear la base de datos - Create the database
-
-Para este paso debe tener instalado PostgreSQL en su máquina
-For this step, you must have PostgreSQL installed on your machine
-
-```bash
-npm run db:create
-```
-
-### Correr migraciones - Run migrations
-
-```bash
-npx prisma migrate deploy
-```
-
-### Ejecutar el proyecto - Run the project
-
-```bash
-npm run dev
-```
-
-# Comandos - Commands
-
-## Crear una migración - Create a migration
-
-```bash
-npx prisma migrate dev --name <nombre-de-la-migracion> && npx prisma generate
-```
-
-## Correr una migración - Run a migration
-
-```bash
-npx prisma migrate deploy
-```
-
-# Métodos de Schedule - Schedule methods
-
-Para activar la funcionalidad debes descomentar la línea en `app.module`:
-To activate the functionality you should uncomment the line in `app.module`:
-
-```ts
-ScheduleModule.forRoot(),
-```
+- **Desarrollador:** jjcmjavascript
+- **Correo:** jjcmjavascript@gmail.com
+- **LinkedIn:** [jjcmjavascript](https://www.linkedin.com/in/jjcmjavascript/)
