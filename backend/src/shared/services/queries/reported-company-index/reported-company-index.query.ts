@@ -65,7 +65,6 @@ export class ReportedCompanyListQuery {
   }
 
   private getOrderBySqlExpression(orderBy: string, order: string): string {
-    console.log(`Order by: ${orderBy}, Order: ${order}`);
     switch (orderBy) {
       case 'name':
         return `UPPER(rc.name) ${order}, rc.id ${order}`;
