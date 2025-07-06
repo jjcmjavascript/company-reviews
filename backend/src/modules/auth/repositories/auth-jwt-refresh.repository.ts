@@ -2,7 +2,7 @@ import { Config } from '@config/config.interface';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { FastifyReply } from 'fastify';
 
 export interface Tokens {
   newAccessToken: string;
@@ -16,7 +16,10 @@ export class AuthJwtRefreshRepository {
     private readonly configService: ConfigService,
   ) {}
 
-  async refreshTokens(request: Request, refreshToken: string): Promise<Tokens> {
+  async refreshTokens(
+    response: FastifyReply,
+    refreshToken: string,
+  ): Promise<Tokens> {
     try {
       const config = this.configService.get<Config>('config');
       const verifyResult = await this.jwtService.verifyAsync(refreshToken, {
@@ -37,14 +40,14 @@ export class AuthJwtRefreshRepository {
         expiresIn: config.jwt.jwtRefreshExpiresIn,
       });
 
-      request.res.cookie('access_token', newAccessToken, {
+      response.setCookie('access_token', newAccessToken, {
         httpOnly: true,
         secure: config.app.isProduction,
         maxAge: config.jwt.jwtExpiresIn,
         sameSite: 'lax',
       });
 
-      request.res.cookie('refresh_token', newRefreshToken, {
+      response.setCookie('refresh_token', newRefreshToken, {
         httpOnly: true,
         secure: config.app.isProduction,
         maxAge: config.jwt.jwtRefreshExpiresIn,

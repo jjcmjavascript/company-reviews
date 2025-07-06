@@ -6,13 +6,12 @@ import {
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
-import { config } from '@config/config';
-import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { AuthJwtRefreshRepository } from './repositories/auth-jwt-refresh.repository';
 import { IS_LOGED_KEY } from '@shared/decorators/loged.decorator';
 import { ConfigService } from '@nestjs/config';
-import { Config } from '@config/config.interface';
+import { JwtConfig } from '@config/config.interface';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -24,7 +23,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const config = this.configService.get<Config>('config');
+    const config = this.configService.get<JwtConfig>('jwt');
     const hasTobeLoged = this.reflector.get<boolean>(
       IS_LOGED_KEY,
       context.getHandler(),
@@ -34,21 +33,23 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const request: Request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const response = context.switchToHttp().getResponse<FastifyReply>();
     const token = this.extractTokenFromHeader(request, 'access_token');
 
     try {
       if (!token) {
         throw new UnauthorizedException('Invalid token');
       }
+      console.log('Token:', token);
 
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: config.jwt.jwtSecret,
+        secret: config.jwtSecret,
       });
 
-      request['user'] = payload;
+      response['user'] = payload;
     } catch {
-      const result = await this.tryRefreshToken(request);
+      const result = await this.tryRefreshToken(request, response);
 
       if (result) {
         return true;
@@ -60,9 +61,12 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private async tryRefreshToken(request: Request): Promise<boolean> {
+  private async tryRefreshToken(
+    request: FastifyRequest,
+    response: FastifyReply,
+  ): Promise<boolean> {
     try {
-      const config = this.configService.get<Config>('config');
+      const config = this.configService.get<JwtConfig>('jwt');
       const refreshToken = this.extractTokenFromHeader(
         request,
         'refresh_token',
@@ -70,14 +74,14 @@ export class AuthGuard implements CanActivate {
 
       if (refreshToken) {
         const payload = await this.refreshTokenRepository.refreshTokens(
-          request,
+          response,
           refreshToken,
         );
 
         request['user'] = await this.jwtService.verifyAsync(
           payload.newAccessToken,
           {
-            secret: config.jwt.jwtSecret,
+            secret: config.jwtSecret,
           },
         );
 
@@ -88,15 +92,20 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  private extractTokenFromHeader(request: Request, tokenName: string): string {
-    const cookies = request.headers.cookie?.split(';') || [];
-    const tokenCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith(`${tokenName}=`),
-    );
-    if (!tokenCookie) {
-      return null;
+  private extractTokenFromHeader(
+    request: FastifyRequest,
+    tokenName: string,
+  ): string {
+    const { access_token, refresh_token } = request.cookies;
+
+    if (tokenName === 'access_token') {
+      return access_token?.trim().replace(/^Bearer\s/, '') || null;
     }
-    const [, cookieValue] = tokenCookie.split('=');
-    return cookieValue.trim();
+
+    if (tokenName === 'refresh_token') {
+      return refresh_token?.trim().replace(/^Bearer\s/, '') || null;
+    }
+
+    return null;
   }
 }

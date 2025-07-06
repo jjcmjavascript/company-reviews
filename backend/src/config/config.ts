@@ -10,6 +10,7 @@ export const config = (): Config => ({
   app: {
     port,
     isProduction,
+    cookieSecret: process.env.COOKIE_SECRET,
   },
   cors: {
     origins,

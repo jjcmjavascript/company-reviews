@@ -2,13 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PermissionService } from '@services/permision.service';
 import { compare } from '@helpers/hash.helper';
-import { Response } from 'express';
+import { FastifyReply } from 'fastify';
 import { UserFindOneRepository } from '@modules/users/repositories/user-find-one.repository';
 import { PasswordFindOneRepository } from '@modules/password/password-find-one.repository';
 import { Roles } from '@shared/services/permission/types/roles.enum';
 import { UserRolesFindOneRepository } from '@modules/user-roles/repositories/user-roles-find-one.repository';
 import { ConfigService } from '@nestjs/config';
-import { Config } from '@config/config.interface';
+import { AppConfig, JwtConfig } from '@config/config.interface';
 
 @Injectable()
 export class AuthJwtSingInRepostory {
@@ -21,12 +21,14 @@ export class AuthJwtSingInRepostory {
   ) {}
 
   async signIn(
-    response: Response,
+    response: FastifyReply,
     email: string,
     password: string,
   ): Promise<void> {
     const user = await this.userFindOneRepository.execute({ email }, false);
-    const config = this.configService.get<Config>('config');
+    const jwtConfig = this.configService.get<JwtConfig>('jwt');
+    const config = this.configService.get<AppConfig>('app');
+
     const userPassword = user
       ? (
           await this.passwordFindOneRepository.execute(user.values.id)
@@ -48,27 +50,29 @@ export class AuthJwtSingInRepostory {
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      secret: config.jwt.jwtSecret,
-      expiresIn: config.jwt.jwtExpiresIn,
+      secret: jwtConfig.jwtSecret,
+      expiresIn: jwtConfig.jwtExpiresIn,
     });
 
     const refreshToken = this.jwtService.sign(payload, {
-      secret: config.jwt.jwtSecret,
-      expiresIn: config.jwt.jwtRefreshExpiresIn,
+      secret: jwtConfig.jwtSecret,
+      expiresIn: jwtConfig.jwtRefreshExpiresIn,
     });
 
-    response.cookie('access_token', accessToken, {
+    response.setCookie('access_token', accessToken, {
       httpOnly: true,
-      secure: config.app.isProduction,
-      maxAge: config.jwt.jwtExpiresIn,
+      secure: config.isProduction,
+      maxAge: jwtConfig.jwtExpiresIn,
       sameSite: 'strict',
+      path: '/',
     });
 
-    response.cookie('refresh_token', refreshToken, {
+    response.setCookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: config.app.isProduction,
-      maxAge: config.jwt.jwtRefreshExpiresIn,
+      secure: config.isProduction,
+      maxAge: jwtConfig.jwtRefreshExpiresIn,
       sameSite: 'strict',
+      path: '/',
     });
   }
 }

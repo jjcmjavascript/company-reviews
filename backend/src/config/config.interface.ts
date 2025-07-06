@@ -1,6 +1,7 @@
 export interface AppConfig {
   port: number;
   isProduction: boolean;
+  cookieSecret: string;
 }
 
 export interface CorsConfig {
