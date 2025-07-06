@@ -34,7 +34,9 @@ export class AuthJwtSingInRepostory {
         ).toPrimitive()
       : null;
 
-    if (!user || !userPassword || !compare(password, userPassword.password)) {
+    const passwordCompare = await compare(password, userPassword.password);
+
+    if (!user || !userPassword || !passwordCompare) {
       throw new UnauthorizedException();
     }
 
