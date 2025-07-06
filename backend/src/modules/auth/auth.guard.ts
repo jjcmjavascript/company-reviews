@@ -94,15 +94,25 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromHeader(
     request: FastifyRequest,
     tokenName: string,
-  ): string {
+  ): string | null {
+    const authHeader = request.headers.authorization;
+    if (
+      authHeader &&
+      authHeader.startsWith('Bearer ') &&
+      tokenName === 'access_token'
+    ) {
+      return authHeader.split(' ')[1];
+    }
+
+    // Si no está en el header, buscar en las cookies (para web)
     const { access_token, refresh_token } = request.cookies;
 
     if (tokenName === 'access_token') {
-      return access_token?.trim().replace(/^Bearer\s/, '') || null;
+      return access_token || null;
     }
 
     if (tokenName === 'refresh_token') {
-      return refresh_token?.trim().replace(/^Bearer\s/, '') || null;
+      return refresh_token || null;
     }
 
     return null;

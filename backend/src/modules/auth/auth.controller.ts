@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthJwtSingInRepostory } from './repositories/auth-jwt-sigin.repository';
 import { SignInDto } from './auth.dto';
+import { FastifyReply } from 'fastify';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,7 @@ export class AuthController {
   @Post('login')
   async signIn(
     @Body() signInDto: SignInDto,
-    @Res({ passthrough: true }) response,
+    @Res({ passthrough: true }) response: FastifyReply,
   ) {
     return this.authJwtSingInRepostory.signIn(
       response,
@@ -26,13 +27,14 @@ export class AuthController {
     );
   }
 
-  // @Public()
-  // @HttpCode(HttpStatus.OK)
-  // @Post('refresh')
-  // async refresh(
-  //   @Body('refresh_token') refreshToken: string,
-  //   @Res({ passthrough: true }) response,
-  // ) {
-  //   return this.authService.refreshTokens(response, refreshToken);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Post('login-mobile')
+  async signInMobile(@Body() signInDto: SignInDto) {
+    const result = await this.authJwtSingInRepostory.signInMobile(
+      signInDto.email,
+      signInDto.password,
+    );
+
+    return result;
+  }
 }

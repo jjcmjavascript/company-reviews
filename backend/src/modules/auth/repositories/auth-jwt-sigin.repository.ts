@@ -9,6 +9,7 @@ import { Roles } from '@shared/services/permission/types/roles.enum';
 import { UserRolesFindOneRepository } from '@modules/user-roles/repositories/user-roles-find-one.repository';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, JwtConfig } from '@config/config.interface';
+import { AuthTokens } from '../auth.interfaces';
 
 @Injectable()
 export class AuthJwtSingInRepostory {
@@ -20,14 +21,12 @@ export class AuthJwtSingInRepostory {
     private configService: ConfigService,
   ) {}
 
-  async signIn(
-    response: FastifyReply,
+  private async _generateTokens(
     email: string,
     password: string,
-  ): Promise<void> {
+  ): Promise<AuthTokens> {
     const user = await this.userFindOneRepository.execute({ email }, false);
     const jwtConfig = this.configService.get<JwtConfig>('jwt');
-    const config = this.configService.get<AppConfig>('app');
 
     const userPassword = user
       ? (
@@ -59,6 +58,21 @@ export class AuthJwtSingInRepostory {
       expiresIn: jwtConfig.jwtRefreshExpiresIn,
     });
 
+    return { accessToken, refreshToken };
+  }
+
+  async signIn(
+    response: FastifyReply,
+    email: string,
+    password: string,
+  ): Promise<void> {
+    const { accessToken, refreshToken } = await this._generateTokens(
+      email,
+      password,
+    );
+    const jwtConfig = this.configService.get<JwtConfig>('jwt');
+    const config = this.configService.get<AppConfig>('app');
+
     response.setCookie('access_token', accessToken, {
       httpOnly: true,
       secure: config.isProduction,
@@ -74,5 +88,9 @@ export class AuthJwtSingInRepostory {
       sameSite: 'strict',
       path: '/',
     });
+  }
+
+  async signInMobile(email: string, password: string): Promise<AuthTokens> {
+    return this._generateTokens(email, password);
   }
 }
