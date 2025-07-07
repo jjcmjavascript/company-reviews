@@ -5,10 +5,12 @@ import {
   HttpCode,
   HttpStatus,
   Res,
+  Get,
 } from '@nestjs/common';
 import { AuthJwtSingInRepostory } from './repositories/auth-jwt-sigin.repository';
 import { SignInDto } from './auth.dto';
 import { FastifyReply } from 'fastify';
+import { Loged } from '@shared/decorators/loged.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +38,11 @@ export class AuthController {
     );
 
     return result;
+  }
+
+  @Loged()
+  @Get('is_logged')
+  async isLogged() {
+    return true;
   }
 }
